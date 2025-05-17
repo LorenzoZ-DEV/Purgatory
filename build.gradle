@@ -1,0 +1,73 @@
+// Plugin declarations
+plugins{
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+// Project information
+group = 'it.vanixstudios'
+version = '1.1.0'
+
+// Constants
+final int TARGET_JAVA_VERSION = 15
+final String UTF_8_ENCODING = 'UTF-8'
+
+// Repository configuration
+repositories {
+    mavenCentral()
+    maven {
+        name = "sonatype"
+        url = "https://oss.sonatype.org/content/groups/public/"
+    }
+    maven {
+        name = "Minecraft Libraries"
+        url = "https://libraries.minecraft.net/"
+    }
+}
+
+// Dependencies
+dependencies {
+    implementation 'org.mongodb:mongo-java-driver:3.12.14'
+    compileOnly 'net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT'
+    implementation 'io.github.revxrsal:lamp.common:4.0.0-rc.10'
+    implementation 'io.github.revxrsal:lamp.bungee:4.0.0-rc.10'
+}
+
+// Java configuration with toolchain setup
+java {
+    def effectiveJavaVersion = JavaVersion.toVersion(TARGET_JAVA_VERSION)
+    sourceCompatibility = effectiveJavaVersion
+    targetCompatibility = effectiveJavaVersion
+
+    if (JavaVersion.current() < effectiveJavaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(TARGET_JAVA_VERSION)
+    }
+}
+
+// Task configurations
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = UTF_8_ENCODING
+
+    if (TARGET_JAVA_VERSION >= 10 || JavaVersion.current().isJava10Compatible()) {
+        options.release.set(TARGET_JAVA_VERSION)
+    }
+}
+
+processResources {
+    def resourceProps = [version: version]
+    inputs.properties resourceProps
+    expand resourceProps
+    filteringCharset UTF_8_ENCODING
+    filesMatching('bungee.yml') {
+        expand resourceProps
+    }
+}
+
+// Shadow JAR configuration
+tasks.named('shadowJar') {
+    archiveClassifier.set('')
+}
+
+tasks.build {
+    dependsOn tasks.shadowJar
+}

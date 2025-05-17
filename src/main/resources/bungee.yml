@@ -1,0 +1,50 @@
+name: Purgatory
+version: '1.1.0'
+main: it.vanixstudios.purgatory.Purgatory
+author: Lorenz
+contributors: X-Development
+commands:
+  ban:
+    description: Bans a player
+    aliases:
+      - jail
+  tempban:
+    description: Temporarily bans a player
+    aliases:
+      - tempjail
+  unban:
+    description: Unbans a player
+    aliases:
+      - unjail
+  xcheckban:
+    description: Checks if a player is banned
+    aliases:
+      - xcheckjail
+  xhistory:
+    description: Shows the ban history of a player
+    aliases:
+      - xhistoryjail
+  kick:
+    description: "Kick player"
+  blacklist:
+    description: "Blacklist player"
+  unblacklist:
+    description: "Unblacklist player"
+  blacklistinfo:
+    description: "Blacklist info"
+  mute:
+    description: "Mute player"
+  tempmute:
+    description: "Temporarily mute player"
+  warn:
+    description: "Warn player"
+  alts:
+    description: "Check alts of a player"
+    aliases:
+      - check
+      - dupeip
+      - checkpunishment
+  unmute:
+    description: "Unmute player"
+
+
