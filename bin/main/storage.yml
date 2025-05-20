@@ -1,0 +1,7 @@
+MONGO:
+  URI: false
+  URI_LINK: 127.0.0.1
+
+  HOST: 127.0.0.1
+  PORT: 27017
+  DATABASE: 'bungee_bans'

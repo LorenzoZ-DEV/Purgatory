@@ -36,7 +36,6 @@ public class PlayerLoginListener implements Listener {
                     &c&lThis punishment is not contestable
                     &c&lIf you think this is a mistake, please contact support.
                     
-                    &Reason: """ + reason + """
                     """));
             return;
         }

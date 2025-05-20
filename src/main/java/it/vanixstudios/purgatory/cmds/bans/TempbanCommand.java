@@ -23,8 +23,8 @@ public class TempbanCommand {
 
     @Command("tempban")
     @CommandPermission("purgatory.ban")
-    @Usage("tempban <player> <duration> <reason>")
-    public void executeTempban(BungeeCommandActor actor, String playerName, String durationArg, @Optional String reason) {
+    @Usage("tempban <player> <duration> <reason> [-p|-s]")
+    public void executeTempban(BungeeCommandActor actor, String playerName, String durationArg, @Optional String... args) {
         UUID uuid = banManager.getOrCreateUUID(playerName);
 
         if (banManager.isBanned(uuid)) {
@@ -40,7 +40,19 @@ public class TempbanCommand {
             return;
         }
 
-        String finalReason = (reason == null || reason.trim().isEmpty()) ? "No specific reason provided." : reason;
+        // Parsing reason and flags
+        StringBuilder reasonBuilder = new StringBuilder();
+        boolean silent = true; // Default is silent
+        for (String arg : args) {
+            if (arg.equalsIgnoreCase("-p")) {
+                silent = false;
+            } else if (!arg.equalsIgnoreCase("-s")) {
+                reasonBuilder.append(arg).append(" ");
+            }
+        }
+
+        String finalReason = reasonBuilder.toString().trim();
+        if (finalReason.isEmpty()) finalReason = "No specific reason provided.";
 
         banManager.tempBan(uuid, playerName, duration, finalReason);
 
@@ -61,8 +73,15 @@ public class TempbanCommand {
         }
 
         actor.reply(C.translate("&aPlayer &e" + playerName + " &ahas been tempbanned for &e" + durationArg + "&a."));
-        notifyStaff(String.format("&c[S] &e%s &chas been tempbanned by &e%s &cfor &e%s&c. Reason: &e%s",
-                playerName, actor.name(), durationArg, finalReason));
+
+        String notification = String.format("&e%s &chas been tempbanned by &e%s &cfor &e%s&c. Reason: &e%s",
+                playerName, actor.name(), durationArg, finalReason);
+
+        if (silent) {
+            notifyStaff("&7[Silent] " + notification);
+        } else {
+            ProxyServer.getInstance().broadcast(C.translate("&c[!] " + notification));
+        }
     }
 
     private void notifyStaff(String message) {

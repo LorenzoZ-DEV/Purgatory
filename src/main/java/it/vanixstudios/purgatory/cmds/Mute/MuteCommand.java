@@ -10,7 +10,6 @@ import revxrsal.commands.bungee.annotation.CommandPermission;
 
 import java.util.UUID;
 
-
 public class MuteCommand {
 
     private final MuteManager muteManager;
@@ -18,13 +17,15 @@ public class MuteCommand {
     public MuteCommand(MuteManager muteManager) {
         this.muteManager = muteManager;
     }
+
     @Command("mute")
     @CommandPermission("purgatory.mute")
-    @Usage("mute <player> <reason>")
+    @Usage("mute <player> <reason> [-p|-s]")
     @Description("Mutes a player permanently")
     public void execute(BungeeCommandActor sender,
                         @Named("player") String playerName,
-                        @Named("reason") String reason) {
+                        @Named("reason") String reason,
+                        @Optional String... flags) {
 
         ProxiedPlayer target = ProxyServer.getInstance().getPlayer(playerName);
         if (target == null) {
@@ -43,10 +44,22 @@ public class MuteCommand {
         sender.reply(C.translate("&aPermanently muted &f" + target.getName() + "&a. Reason: &f" + reason));
         target.sendMessage(C.translate("&cYou have been permanently muted. Reason: &f" + reason));
 
-        for (ProxiedPlayer staff : ProxyServer.getInstance().getPlayers()) {
-            if (staff.hasPermission("purgatory.staff")) {
-                staff.sendMessage(C.translate("&c[S] &e" + target.getName() + " &chas been &cpermanently muted by &e" + sender.name()));
+        boolean silent = true;
+        for (String flag : flags) {
+            if (flag.equalsIgnoreCase("-p")) {
+                silent = false;
+                break;
             }
+        }
+
+        String message = C.translate("&e" + target.getName() + " &chas been permanently muted by &e" + sender.name() + "&c. Reason: &e" + reason);
+
+        if (silent) {
+            ProxyServer.getInstance().getPlayers().stream()
+                    .filter(p -> p.hasPermission("purgatory.staff"))
+                    .forEach(p -> p.sendMessage(C.translate("&7[Silent] " + message)));
+        } else {
+            ProxyServer.getInstance().broadcast(C.translate("&c[!] " + message));
         }
     }
 }

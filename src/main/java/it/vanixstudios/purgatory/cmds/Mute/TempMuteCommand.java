@@ -9,7 +9,6 @@ import revxrsal.commands.annotation.*;
 import revxrsal.commands.bungee.annotation.CommandPermission;
 import revxrsal.commands.command.CommandActor;
 
-
 public class TempMuteCommand {
 
     private final MuteManager muteManager;
@@ -17,13 +16,15 @@ public class TempMuteCommand {
     public TempMuteCommand(MuteManager muteManager) {
         this.muteManager = muteManager;
     }
+
     @Command("tempmute")
-    @Usage("tempmute <player> <duration> <reason>")
+    @Usage("tempmute <player> <duration> <reason> [-p|-s]")
     @CommandPermission("purgatory.tempmute")
     public void onTempMute(CommandActor actor,
                            @Named("player") @Suggest("player") String playerName,
                            @Named("duration") String durationStr,
-                           @Named("reason")  String reason) {
+                           @Named("reason") String reason,
+                           @Optional String... flags) {
 
         ProxiedPlayer target = ProxyServer.getInstance().getPlayer(playerName);
         if (target == null || !target.isConnected()) {
@@ -55,10 +56,23 @@ public class TempMuteCommand {
         actor.reply(C.translate("&aYou temporarily muted &f" + playerName + " &afor &f" + formattedDuration + "&a. Reason: &f" + reason));
         target.sendMessage(C.translate("&cYou have been temporarily muted for &f" + formattedDuration + "&c. Reason: &f" + reason));
 
-        for (ProxiedPlayer staff : ProxyServer.getInstance().getPlayers()) {
-            if (staff.hasPermission("purgatory.staff")) {
-                staff.sendMessage(C.translate("&c[S] &e" + playerName + " &chas been temporarily muted by &e" + actor.name() + "&c for &f" + formattedDuration));
+        boolean silent = true;
+        for (String flag : flags) {
+            if (flag.equalsIgnoreCase("-p")) {
+                silent = false;
+                break;
             }
+        }
+
+        String message = C.translate("&e" + playerName + " &chas been temporarily muted by &e" + actor.name() +
+                " &cfor &f" + formattedDuration + "&c. Reason: &e" + reason);
+
+        if (silent) {
+            ProxyServer.getInstance().getPlayers().stream()
+                    .filter(p -> p.hasPermission("purgatory.staff"))
+                    .forEach(p -> p.sendMessage(C.translate("&7[Silent] " + message)));
+        } else {
+            ProxyServer.getInstance().broadcast(C.translate("&c[! ] " + message));
         }
     }
 }

@@ -28,9 +28,9 @@ public class UnbanCommand {
     }
 
     @Command("unban")
-    @Usage("unban <player>")
+    @Usage("unban <player> [-p|-s]")
     @CommandPermission("purgatory.ban")
-    public void unban(BungeeCommandActor actor, String playerName) {
+    public void unban(BungeeCommandActor actor, String playerName, @Optional String... args) {
         Document doc = banManager.getBansCollection().find(eq("name", playerName))
                 .sort(descending("bannedAt"))
                 .first();
@@ -61,10 +61,20 @@ public class UnbanCommand {
             banManager.removeFromJail(target);
         }
 
-        String notification = C.translate("&c[S] &e" + playerName + " &cwas unbanned by &e" + actor.name() + ".");
-        ProxyServer.getInstance().getPlayers().stream()
-                .filter(p -> p.hasPermission("purgatory.notifications"))
-                .forEach(p -> p.sendMessage(notification));
+        boolean silent = true; // default
+        for (String arg : args) {
+            if (arg.equalsIgnoreCase("-p")) silent = false;
+        }
+
+        String message = C.translate("&e" + playerName + " &cwas unbanned by &e" + actor.name() + ".");
+
+        if (silent) {
+            ProxyServer.getInstance().getPlayers().stream()
+                    .filter(p -> p.hasPermission("purgatory.notifications"))
+                    .forEach(p -> p.sendMessage(C.translate("&7[Silent] " + message)));
+        } else {
+            ProxyServer.getInstance().broadcast(C.translate("&c[!] " + message));
+        }
     }
 
     public List<String> unbanTabComplete(BungeeCommandActor actor, @Optional String prefix) {

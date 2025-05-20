@@ -40,22 +40,24 @@ public class ChatListener implements Listener
     }
 
     @EventHandler
-     public void onChat(ChatEvent event) {
-         if (!(event.getSender() instanceof ProxiedPlayer)) return;
+    public void onChat(ChatEvent event) {
+        if (!(event.getSender() instanceof ProxiedPlayer)) return;
 
-         ProxiedPlayer player = (ProxiedPlayer) event.getSender();
-         UUID uuid = player.getUniqueId();
+        if (event.isCommand()) return;
 
-         if (muteManager.isMuted(uuid)) {
-             String reason = muteManager.getMuteReason(uuid);
-             event.setCancelled(true);
+        ProxiedPlayer player = (ProxiedPlayer) event.getSender();
+        UUID uuid = player.getUniqueId();
 
-             player.sendMessage(C.translate("&cYou are muted. Reason: &f" + reason));
+        if (muteManager.isMuted(uuid)) {
+            String reason = muteManager.getMuteReason(uuid);
+            event.setCancelled(true);
 
-             if (muteManager.isTempMuted(uuid)) {
-                 long remaining = muteManager.getTempMuteEnd(uuid) - System.currentTimeMillis();
-                 player.sendMessage( C.translate("&cTime left: &f" + TimeUtil.formatDuration(remaining)));
-             }
-         }
-     }
+            player.sendMessage(C.translate("&cYou are muted. Reason: &f" + reason));
+
+            if (muteManager.isTempMuted(uuid)) {
+                long remaining = muteManager.getTempMuteEnd(uuid) - System.currentTimeMillis();
+                player.sendMessage(C.translate("&cTime left: &f" + TimeUtil.formatDuration(remaining)));
+            }
+        }
+    }
 }

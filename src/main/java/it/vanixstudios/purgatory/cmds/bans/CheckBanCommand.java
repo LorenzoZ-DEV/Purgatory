@@ -61,6 +61,7 @@ public class CheckBanCommand {
             String reason = banManager.getBanReason(uuid);
             actor.reply(C.translate("&aPlayer &e" + playerName + " &ais banned."));
             actor.reply(C.translate("&7Reason: &f" + (reason == null ? "No reason specified" : reason)));
+            actor.reply(C.translate("&fBanned by &f: " + banManager.getBannedBy(uuid)));
         } else {
             actor.reply(C.translate("&aPlayer &e" + playerName + " &ais not banned."));
         }

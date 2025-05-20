@@ -50,8 +50,6 @@ public class BanManager {
         bans.insertOne(doc);
     }
 
-
-
     public boolean isBanned(UUID uuid) {
         Document doc = bans.find(eq("uuid", uuid.toString()))
                 .sort(descending("bannedAt"))
@@ -164,6 +162,25 @@ public class BanManager {
 
         return UUID.nameUUIDFromBytes(("OfflinePlayer:" + playerName).getBytes(StandardCharsets.UTF_8));
     }
+
+    public BanInfo getBannedBy(UUID uuid) {
+        if (uuid == null) return null;
+
+        Document doc = bans.find(eq("uuid", uuid.toString()))
+                .sort(descending("bannedAt"))
+                .first();
+        if (doc == null) return null;
+
+        String reason = doc.getString("reason");
+        Date bannedAtDate = doc.getDate("bannedAt");
+        long bannedAt = bannedAtDate != null ? bannedAtDate.getTime() : 0;
+        boolean permanent = doc.getBoolean("permanent", false);
+        long duration = permanent ? 0 : (doc.getDate("until") != null ? doc.getDate("until").getTime() - bannedAt : 0);
+
+        return new BanInfo(reason, bannedAt, duration);
+    }
+
+
 
 
 

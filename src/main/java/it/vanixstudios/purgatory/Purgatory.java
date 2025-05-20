@@ -1,9 +1,11 @@
 package it.vanixstudios.purgatory;
 
 import com.mongodb.client.MongoCollection;
+import it.vanixstudios.purgatory.cmds.Mute.CheckMuteCommand;
 import it.vanixstudios.purgatory.cmds.Mute.MuteCommand;
 import it.vanixstudios.purgatory.cmds.Mute.TempMuteCommand;
 import it.vanixstudios.purgatory.cmds.Mute.UnMuteCommand;
+import it.vanixstudios.purgatory.cmds.admin.PurgatoryCmd;
 import it.vanixstudios.purgatory.cmds.alts.AltsCommand;
 import it.vanixstudios.purgatory.cmds.bans.*;
 import it.vanixstudios.purgatory.cmds.blacklist.BlacklistCommand;
@@ -17,6 +19,7 @@ import it.vanixstudios.purgatory.listeners.evasion.BanEvadeListener;
 import it.vanixstudios.purgatory.listeners.mute.ChatListener;
 import it.vanixstudios.purgatory.manager.BanManager;
 import it.vanixstudios.purgatory.manager.mute.MuteManager;
+import it.vanixstudios.purgatory.model.ProfileManager;
 import it.vanixstudios.purgatory.storage.MongoManager;
 import it.vanixstudios.purgatory.tasks.BanActionBarTask;
 import it.vanixstudios.purgatory.util.Art;
@@ -36,9 +39,15 @@ import java.util.List;
 public final class Purgatory extends Plugin {
 
     private static Purgatory instance;
+
     private BanManager banManager;
     private MuteManager muteManager;
     private MongoManager mongoManager;
+    private ProfileManager profileManager;
+
+    public static Purgatory getInstance() {
+        return Purgatory.instance;
+    }
 
     @Override
     public void onEnable() {
@@ -53,7 +62,7 @@ public final class Purgatory extends Plugin {
         Art.asciiArt();
         ProxyServer.getInstance().getScheduler().schedule(
                 this,
-                new BanActionBarTask (banManager),
+                new BanActionBarTask(banManager),
                 0,
                 1,
                 java.util.concurrent.TimeUnit.SECONDS
@@ -78,6 +87,7 @@ public final class Purgatory extends Plugin {
             }
         }
     }
+
     private void registerlistener() {
         List.of(
                 new PlayerLoginListener(),
@@ -109,6 +119,8 @@ public final class Purgatory extends Plugin {
 
             banManager = new BanManager(bans);
             muteManager = new MuteManager(mongoManager.getDatabase());
+            profileManager = new ProfileManager(this);
+            profileManager.load();
 
             Logger.database("&aMongoDB connection successful.");
         } catch (IOException e) {
@@ -121,45 +133,47 @@ public final class Purgatory extends Plugin {
 
 
     private void registerCommands() {
-        Logger.info ( "&aRegistering commands..." );
+        Logger.info("&aRegistering commands...");
         Lamp<BungeeCommandActor> lamp = BungeeLamp.builder(this).build();
 
         if (banManager != null) {
             lamp.register(
-               new BanCommand(banManager),
-               new TempbanCommand(banManager),
-               new HistoryCommand(banManager),
-               new CheckBanCommand(banManager),
-               new UnbanCommand(banManager), new AltsCommand(), new KickCommand()
+                    new BanCommand(banManager),
+                    new TempbanCommand(banManager),
+                    new HistoryCommand(banManager),
+                    new BanListCommand(),
+                    new CheckBanCommand(banManager),
+                    new UnbanCommand(banManager), new AltsCommand(), new KickCommand(), new PurgatoryCmd()
 
             );
         } else {
-            Logger.error ( "BanManager is not initialized. Ban-related commands will not be registered." );
+            Logger.error("BanManager is not initialized. Ban-related commands will not be registered.");
         }
 
         if (muteManager != null) {
             lamp.register(
                     new MuteCommand(muteManager),
                     new TempMuteCommand(muteManager),
-                    new UnMuteCommand(muteManager)
+                    new UnMuteCommand(muteManager),
+                    new CheckMuteCommand(muteManager)
 
             );
         } else {
-            Logger.error ( "MuteManager is not initialized. Mute-related commands will not be registered." );
+            Logger.error("MuteManager is not initialized. Mute-related commands will not be registered.");
         }
 
         MongoCollection blacklistCollection = mongoManager != null ?
-                mongoManager.getDatabase ( ).getCollection ( "blacklist" ) : null;
+                mongoManager.getDatabase().getCollection("blacklist") : null;
 
         if (blacklistCollection != null) {
 
             lamp.register(
                     new BlacklistCommand(),
                     new BlacklistInfoCommand(),
-                     new UnblacklistCommand(blacklistCollection)
+                    new UnblacklistCommand(blacklistCollection)
             );
         } else {
-            Logger.error ( "Blacklist collection is not initialized. Blacklist-related commands will not be registered." );
+            Logger.error("Blacklist collection is not initialized. Blacklist-related commands will not be registered.");
         }
 
     }
@@ -169,6 +183,8 @@ public final class Purgatory extends Plugin {
         Logger.info("&cShutting down plugin...");
         Art.asciiArtStop();
 
+        if (profileManager != null) profileManager.close();
+
         if (mongoManager != null) {
             mongoManager.close();
             Logger.database("&cMongoDB connection closed.");
@@ -177,23 +193,24 @@ public final class Purgatory extends Plugin {
         banManager = null;
         mongoManager = null;
         instance = null;
+        muteManager = null;
 
         Logger.info("&cPlugin disabled.");
     }
 
-    public static Purgatory getInstance() {
-        return instance;
-    }
-
     public BanManager getBanManager() {
-        return banManager;
+        return this.banManager;
     }
+
     public MuteManager getMuteManager() {
-        return muteManager;
+        return this.muteManager;
     }
+
     public MongoManager getMongoManager() {
-        return mongoManager;
+        return this.mongoManager;
     }
 
-
+    public ProfileManager getProfileManager() {
+        return this.profileManager;
+    }
 }
