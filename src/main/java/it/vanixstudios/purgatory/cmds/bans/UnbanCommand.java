@@ -63,8 +63,11 @@ public class UnbanCommand {
 
         boolean silent = true; // default
         for (String arg : args) {
-            if (arg.equalsIgnoreCase("-p")) silent = false;
+            if (arg != null && arg.equalsIgnoreCase("-p")) {
+                silent = false;
+            }
         }
+
 
         String message = C.translate("&e" + playerName + " &cwas unbanned by &e" + actor.name() + ".");
 

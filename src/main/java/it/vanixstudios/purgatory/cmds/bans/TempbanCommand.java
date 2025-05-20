@@ -24,7 +24,7 @@ public class TempbanCommand {
     @Command("tempban")
     @CommandPermission("purgatory.ban")
     @Usage("tempban <player> <duration> <reason> [-p|-s]")
-    public void executeTempban(BungeeCommandActor actor, String playerName, String durationArg, @Optional String... args) {
+    public void executeTempban(BungeeCommandActor actor, String playerName, String durationArg, @Optional String reason) {
         UUID uuid = banManager.getOrCreateUUID(playerName);
 
         if (banManager.isBanned(uuid)) {
@@ -40,18 +40,14 @@ public class TempbanCommand {
             return;
         }
 
-        // Parsing reason and flags
-        StringBuilder reasonBuilder = new StringBuilder();
-        boolean silent = true; // Default is silent
-        for (String arg : args) {
-            if (arg.equalsIgnoreCase("-p")) {
-                silent = false;
-            } else if (!arg.equalsIgnoreCase("-s")) {
-                reasonBuilder.append(arg).append(" ");
-            }
+        if (reason == null) reason = "";
+
+        boolean silent = true;
+        if (reason.contains("-p")) {
+            silent = false;
         }
 
-        String finalReason = reasonBuilder.toString().trim();
+        String finalReason = reason.replace("-p", "").replace("-s", "").trim();
         if (finalReason.isEmpty()) finalReason = "No specific reason provided.";
 
         banManager.tempBan(uuid, playerName, duration, finalReason);
@@ -63,9 +59,9 @@ public class TempbanCommand {
                     &c&lYour account has been temporarily suspended
                     &c&lfrom the &c&lX-Network&c.
                     &c&lYou have been banned for %duration%
-                    
+
                     &4Purchase an unban @ store.x-network.org
-                    
+
                     &7Reason: %reason%
                     """
                     .replace("%duration%", durationArg)

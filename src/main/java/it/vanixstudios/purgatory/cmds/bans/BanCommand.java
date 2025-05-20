@@ -25,8 +25,7 @@ public class BanCommand {
     @Usage("ban <player> [reason] [-p|-s]")
     public void ban(BungeeCommandActor actor,
                     ProxiedPlayer target,
-                    @Optional String reason,
-                    @Optional String flag) {
+                    @Optional String reason) {
 
         if (target == null) {
             actor.reply(C.translate("&cTarget player not found."));
@@ -41,10 +40,15 @@ public class BanCommand {
             return;
         }
 
-        String finalReason = (reason == null || reason.startsWith("-")) ? "No reason specified." : reason;
+        if (reason == null) reason = "";
 
-        boolean publicBan = "-p".equalsIgnoreCase(flag);
-        boolean silentBan = "-s".equalsIgnoreCase(flag) || !publicBan;
+        boolean silent = true;
+        if (reason.contains("-p")) {
+            silent = false;
+        }
+
+        String finalReason = reason.replace("-p", "").replace("-s", "").trim();
+        if (finalReason.isEmpty()) finalReason = "No reason specified.";
 
         banManager.ban(uuid, playerName, finalReason);
         banManager.sendToJail(target);
@@ -59,15 +63,13 @@ public class BanCommand {
 
         actor.reply(C.translate("&aPlayer &e" + playerName + " &ahas been permanently banned."));
 
-        String broadcastMessage = C.translate(String.format(
-                "&7[Silent] &e%s &chas been permanently banned by &e%s&c. Reason: &e%s",
-                playerName, actor.name(), finalReason
-        ));
+        String notification = String.format("&e%s &chas been permanently banned by &e%s&c. Reason: &e%s",
+                playerName, actor.name(), finalReason);
 
-        if (publicBan) {
-            ProxyServer.getInstance().broadcast(broadcastMessage);
+        if (silent) {
+            notifyStaff("&7[Silent] " + notification);
         } else {
-            notifyStaff(broadcastMessage);
+            ProxyServer.getInstance().broadcast(C.translate("&c[!] " + notification));
         }
     }
 
