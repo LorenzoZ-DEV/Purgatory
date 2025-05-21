@@ -1,15 +1,13 @@
 package it.vanixstudios.purgatory.cmds.kick;
 
 import it.vanixstudios.purgatory.Purgatory;
-import it.vanixstudios.purgatory.util.C;
-import it.vanixstudios.purgatory.util.Logger;
+import it.vanixstudios.purgatory.util.strings.C;
+import it.vanixstudios.purgatory.util.console.Logger;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import revxrsal.commands.annotation.*;
 import revxrsal.commands.bungee.actor.BungeeCommandActor;
 import revxrsal.commands.bungee.annotation.CommandPermission;
-
-import java.util.Arrays;
 
 public class KickCommand {
 

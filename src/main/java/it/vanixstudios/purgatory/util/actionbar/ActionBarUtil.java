@@ -1,4 +1,4 @@
-package it.vanixstudios.purgatory.util;
+package it.vanixstudios.purgatory.util.actionbar;
 
 import it.vanixstudios.purgatory.manager.BanInfo;
 import it.vanixstudios.purgatory.manager.BanManager;

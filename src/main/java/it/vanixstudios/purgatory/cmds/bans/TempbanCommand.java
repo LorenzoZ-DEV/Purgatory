@@ -2,8 +2,8 @@ package it.vanixstudios.purgatory.cmds.bans;
 
 import it.vanixstudios.purgatory.Purgatory;
 import it.vanixstudios.purgatory.manager.BanManager;
-import it.vanixstudios.purgatory.util.C;
-import it.vanixstudios.purgatory.util.TimeUtil;
+import it.vanixstudios.purgatory.util.strings.C;
+import it.vanixstudios.purgatory.util.duration.TimeUtil;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import revxrsal.commands.annotation.Command;

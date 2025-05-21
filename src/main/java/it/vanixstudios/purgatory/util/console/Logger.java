@@ -1,8 +1,8 @@
-package it.vanixstudios.purgatory.util;
+package it.vanixstudios.purgatory.util.console;
 
+import it.vanixstudios.purgatory.util.strings.C;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class Logger {
 

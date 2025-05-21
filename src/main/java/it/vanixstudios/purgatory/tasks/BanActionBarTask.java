@@ -1,7 +1,7 @@
 package it.vanixstudios.purgatory.tasks;
 
 import it.vanixstudios.purgatory.manager.BanManager;
-import it.vanixstudios.purgatory.util.ActionBarUtil;
+import it.vanixstudios.purgatory.util.actionbar.ActionBarUtil;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 

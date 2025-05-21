@@ -1,7 +1,7 @@
 package it.vanixstudios.purgatory.cmds.blacklist;
 
 import it.vanixstudios.purgatory.Purgatory;
-import it.vanixstudios.purgatory.util.C;
+import it.vanixstudios.purgatory.util.strings.C;
 import org.bson.Document;
 import revxrsal.commands.annotation.Command;
 import revxrsal.commands.annotation.Description;

@@ -1,10 +1,8 @@
 package it.vanixstudios.purgatory.cmds.admin;
 
 import it.vanixstudios.purgatory.Purgatory;
-import it.vanixstudios.purgatory.manager.config.ConfigManager;
-import it.vanixstudios.purgatory.util.C;
+import it.vanixstudios.purgatory.util.strings.C;
 import revxrsal.commands.annotation.Command;
-import revxrsal.commands.annotation.Subcommand;
 import revxrsal.commands.annotation.Usage;
 import revxrsal.commands.bungee.annotation.CommandPermission;
 import revxrsal.commands.command.CommandActor;

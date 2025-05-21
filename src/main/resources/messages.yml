@@ -1,13 +1,53 @@
+#  ⠀⢡⠀⠰⣶⣤⣦⣤⣔⣠⣄⣄⣐⣀⡀⠄⠀⠂⠄⡐⢠⢢⠀⣀⠲⡰⡄⠦⠔⠢⣥⠛⠲⢢⡆⣙⠲⠥⡍⠧⡍⠚⣠⡑⣈⣦⠗⣃⣩⡚⠸⡷⢺⢉⠶⡱⠰⡛⡬⠜⠮⠏⣝⣋⣍
+#    ⠀⠄⠁⢸⣿⣿⡍⣽⢟⣿⣿⣿⣿⣿⠿⣿⣿⣿⣷⣶⣶⣶⣶⣶⣧⣤⣬⣥⣀⣀⣈⣐⣙⣲⢤⠩⠝⠒⣉⠱⢤⣗⢃⠰⢇⡒⠌⠄⠡⡑⣞⠔⡩⡍⠶⣒⣣⢰⠐⣜⠸⢽⣃⢭⢏
+#    ⡀⢁⠂⢸⣯⠟⢜⣵⣿⣿⣿⠻⢿⣿⡷⢸⣿⣿⢣⣿⣿⣿⣿⣿⣿⡹⣿⡏⠻⠹⡛⣿⣿⣿⣿⡿⠿⣿⣿⣶⣶⣶⣶⣾⣶⣥⣬⣭⣤⣤⣙⣊⣲⡝⣐⣛⡈⠊⢓⡄⢆⡣⣌⣬⡵
+#    ⢤⠈⠇⣿⢻⣴⡸⡀⠀⡀⠀⠀⠀⠀⠉⠁⢿⣿⠸⣛⡿⢿⣿⣿⣿⣇⣿⣇⣷⡇⢃⢿⣿⣿⣿⡇⡇⢹⣿⣿⣿⣿⣿⡿⣸⡿⣻⣯⢻⣿⣿⢛⣿⣿⣿⣿⣿⣿⣿⣿⣷⣶⣶⣿⣷
+#    ⢈⡉⢤⣿⣾⣿⡇⣇⠀⢹⣿⣷⣤⣤⡀⠀⠘⡇⠀⠀⠙⢷⣎⡿⣿⣿⡘⡧⣿⣿⣦⢸⣿⣿⣿⡇⣿⡌⢿⣿⣿⣿⣿⣧⣿⢹⣿⣿⡎⣿⣿⢸⡸⣿⣿⣿⣿⣿⡘⣿⣿⢸⣿⣿⣿
+#    ⠨⢌⢸⣇⣿⣿⡇⣿⣆⠈⣿⣿⣿⣿⡿⠇⢠⠀⢀⠀⠀⠀⠨⣵⣾⣿⣧⠃⣿⣿⣿⣎⢿⣿⣿⣿⢹⣏⡘⣿⣿⣿⡿⢸⣿⣾⣽⣿⣗⢻⣿⢸⣥⢿⣿⣿⣿⣿⢀⣿⢃⣿⣿⣿⣧
+#    ⡐⢈⢸⣿⣿⣿⣷⢹⣿⡧⠙⣿⣿⣿⣷⡀⣜⡄⠘⠃⡠⠂⠀⠘⣿⣿⣿⣧⢹⣿⣿⣿⡜⡙⢿⣿⡎⣿⡖⢸⣿⣿⡇⣧⣽⣯⣭⣿⣿⡆⣿⡏⣿⣎⣿⣿⣿⣿⢨⠘⣼⣿⣿⣿⡷
+#    ⢈⡥⣾⣿⣿⣿⣿⣇⢻⣶⣶⣴⣛⣿⣿⣷⣙⠷⣭⣽⣾⠆⣰⣷⣽⣿⣿⣿⣿⣿⣿⣿⣿⡜⢨⡻⣿⢸⣿⣆⢹⣿⢹⡿⠿⠿⠛⠛⠋⠘⠘⡇⢿⣿⡜⣿⣿⣿⠰⢱⣿⣿⣿⣿⠃
+#    ⢋⠀⣿⢹⣿⣿⣿⡟⣎⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣄⠻⣮⡃⢻⣿⠅⠙⠀⢀⣀⣀⣀⠀⠀⠀⠀⠙⠀⠀⠈⠘⣿⣿⢀⣿⣿⣿⣿⣿⢏
+#    ⣄⢻⣿⡇⠙⣿⣿⣧⢢⡀⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢿⣿⣿⣿⣷⣿⣿⣯⣶⣾⣿⣿⣿⣿⣿⣿⣄⠠⢸⠀⠀⣠⠀⠠⠀⣈⢧⣾⣿⣿⣿⣿⣟⠆
+#    ⠲⣸⣇⡇⠀⠎⠻⣿⣧⠻⣶⣌⣻⣿⣿⣿⣿⣿⣿⣿⣿⣽⣿⡿⣿⣻⣿⣿⣿⣿⣿⣿⣿⣽⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣄⢤⣬⣄⡈⠁⡠⠃⠀⢁⣾⣿⣿⣿⣿⣿⡿⠢
+#    ⡻⢿⣿⣥⣬⣿⠥⠬⣻⣷⣻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣮⣟⣿⣿⣿⣯⣟⡿⣿⣿⣟⣯⣿⣿⣾⣝⣿⣿⣿⣿⣿⣿⣿⣿⣦⣉⣟⣚⡙⠛⠛⠛⡛⣤⢏⣾⣿⣿⣿⣿⣿⣿⡟⠥
+#    ⣭⣀⡀⠈⣉⠉⡉⠙⠛⠛⠒⠛⠟⠛⠿⠿⠿⠿⢿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⢷⣾⣽⣻⣿⣽⣿⡿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡿⠷⡾⡿⣣⣿⣿⢿⣿⣿⣿⣿⣿⣟⡘
+#    ⣚⠓⣦⠼⢢⠅⠮⡡⣞⡤⡘⢆⡐⢠⠐⢄⡀⢠⢀⢠⠀⠀⠀⢈⡠⡉⠉⠉⠉⠙⠛⠒⠚⠛⠟⠛⠾⠭⠽⠿⣿⣿⣿⣿⣿⣿⣿⠿⠫⣗⣩⣣⣞⣵⣿⣟⣳⣿⣿⣿⣿⢿⣼⢠⢃
+#    ⢇⡽⢊⢮⢳⠝⠲⢣⠖⠶⠮⡘⠴⣠⣉⡐⢦⡄⣋⠈⠋⣒⡬⢐⠸⢡⣲⡉⢖⠀⠘⣄⢊⡰⢄⢠⠀⢤⠐⡠⢀⡀⠀⢈⡁⠉⠉⡉⠉⡉⠓⠒⠛⠛⠿⠻⠿⠿⠿⠿⣷⣛⣿⠅⢺
+#    ⣱⠪⡽⢾⡫⢅⣏⠳⠌⡹⠩⡹⠄⢔⡈⢷⣃⠸⣮⠴⠾⠠⣉⠖⢣⣢⡁⠏⠡⡈⢅⡰⠉⡱⢁⠂⠩⢞⠈⡙⢂⠒⠡⠉⡙⣉⡄⠑⡌⣌⠁⡃⡀⢄⠠⡡⢤⢐⠠⢠⡀⣐⣤⠊⡰
+#
+#------------------------------------------------------------------------------------------
+#                           M E S S A G E S      F I L E
+#------------------------------------------------------------------------------------------
+#                            This Plugin was Developed Lorenz
+#                                 Name :  Purgatory
+#-----------------------------------------------------------------------------------------
+# Placeholder explanation:
+# {target} - Represents the target player (e.g., the player being banned, muted, etc.).
+# {reason} - The reason for the action taken (e.g., ban, mute, kick, etc.).
+# {issuer} - The name of the person/administrator issuing the action.
+# {duration} - The time duration for temporary bans or mutes.
+# {ban_evador} - Ban evader's username.
+# {old_nick} - Username of the original banned player attempting to evade the ban.
+# {server} - The name of the server being joined.
 ban:
   already_banned: "&e{target} &cis already banned."
+  # Notification to the sender when a player is permanently banned.
   ban_sender_notification: "&aYou permanently banned &f{target} &afor period FOREVER for reason: {reason}"
+  # Notification to the sender when a player is temporarily banned.
   tempban_sender_notification: "&aYou temporarily banned &f{target} &afor period {duration} for reason: {reason}"
+  # Broadcasted message notifying everyone of a permanent ban.
   ban_notification: "&7{target} &ahas been permanently banned by &7{issuer}. &aReason: &e{reason}"
+  # Broadcasted message notifying everyone of a temporary ban.
   tempban_notification: "&7{target} &ahas been temporarily banned by &7{issuer}. &afor {duration} &aReason: &e{reason}"
+  # Message shown when no ban is found for a player.
   no_ban_found: "&cNo ban found for player &e{target}"
+  # Notification to the sender when a player is unbanned.
   unban_sender_notification: "&aYou have unbanned &f{target}"
+  # Broadcasted message notifying everyone of a player's unban.
   unban_notification: "&7{target} &ahas been unbanned by &7{issuer}"
+  # Message shown when a banned player tries to use a command.
   ban_command_notallowed: "&cYou are banned from the server and cannot use this command."
+  # Disconnect message shown to a player who is permanently banned.
   ban_disconnect: |-
     &c&lYour account has been suspended
     &c&lfrom the &c&lX-Network&c.
@@ -15,6 +55,7 @@ ban:
     &4Purchase an unban @ store.x-network.org
     
     &7Reason: &e{reason}
+  # Disconnect message shown to a player who is temporarily banned.
   tempban_disconnect: |-
     &c&lYour account has been temporarily suspended
     &c&lfrom the &c&lX-Network&c.
@@ -25,40 +66,70 @@ ban:
     &7Reason: {reason}
 
 blacklist:
+  # Notification to the sender when a player is added to the blacklist.
   blacklist_sender_notification: "&aYou have blacklisted &c&l{target} &afor &c&l{reason} "
+  # Notification to the sender when a player is removed from the blacklist.
   unblacklist_sender_notification: "&aYou have unblacklisted &c&l{target}"
+  # Broadcasted message notifying everyone of a player's blacklist entry.
   blacklist_notification: "&7{target} &ahas been permanently blacklisted by &7{issuer}"
+  # Broadcasted message notifying everyone of a player's removal from the blacklist.
   unblacklist_notification: "&7{target} &ahas been unblackliisted by &7{issuer}"
+  # Message shown when attempting to remove a player not on the blacklist.
   not_blacklist: "&f{target} &cis not in blacklist"
+  # Disconnect message shown to a blacklisted player.
   blacklist_disconnect: |-
     &c&lYour account was Blacklisted from X-NETWORK
     &c&lThis punishment is not contestable
     &c&lIf you think this is a mistake, please contact support.
+
 mute:
+  # Notification to the sender when a player is permanently muted.
   mute_sender_notification: "&aYou permanently muted &f{target} &afor period FOREVER for reason: {reason}"
+  # Notification to the sender when a player is temporarily muted.
   tempmute_sender_notification: "&aYou temporarily muted &f{target} &afor period {duration} for reason: {reason}"
+  # Broadcasted message notifying everyone of a player's permanent mute.
   mute_notification: "&7{target} &ahas been permanently muted by &7{issuer}. &aReason: &e{reason}"
+  # Broadcasted message notifying everyone of a player's temporary mute.
   tempmute_notification: "&7{target} &ahas been temporarily muted by &7{issuer} &afor &f{duration}. &aReason: &e{reason}"
+  # Broadcasted message notifying everyone of a player's unmute.
   unmute_notification: "&7{target} &ahas been unmuted by &7{issuer}"
+  # Message shown to the muted player when permanently muted.
   mute_message_player: "&cYou have been permanently muted. Reason: &f{reason}"
+  # Message shown to the muted player when temporarily muted.
   tempmute_message_player: "&cYou have been temporarily muted for {duration}&c. Reason: &f{reason}"
+  # Message shown when attempting to mute an already muted player.
   muted_already: "&cPlayer is already muted."
+  # Message shown when attempting to unmute a player who is not muted.
   not_muted: "&f{target} &cis not muted."
+  # Notification to the sender when a player is unmuted.
   unmute_sender_notification: "&aYou have unmuted &f{target}."
+  # Message shown to the player when they are unmuted.
   unmute_message_player: "&aYou have been unmuted."
 
 kick:
+  # Message shown to the player when they are kicked.
   player_kick_message: "&cYou have been kicked from the server.\n&7Reason: &c{reason}"
+  # Notification to the sender when a player is kicked.
   kick_sender_notification: "&aYou kicked &e{target} &afor {reason}"
+  # Broadcasted message notifying everyone of a player's kick.
   kick_notification: "&7{target} &ahas been kicked by &7{sender}. &aReason: &e{reason}"
 
 alts:
+  # Message shown when no alternate accounts are found for a player.
   no_alts_found: "&aNo alternate accounts found for &c{target}"
+  # Message showing the list of a player's alternate accounts.
   alt_found: "&7{target}'s Alts &8(&aOnline, &cBanned&7, &aOnline&8):"
+
 general:
+  # Message shown when the specified player is not found.
   player_not_found: "&cPlayer not found."
+  # Message shown when an action requires the player to be online.
   player_must_be_online: "&cPlayer must be online."
+  # Message shown when the provided duration format is invalid.
   invalid_duration: "&cInvalid duration. Use formats like 10m, 1h, 2d."
+  # Alert shown when a banned player uses an alternate account to join the server.
   ban_evading_alert: " &7(&e!&7) &7{ban_evador} &fjoined to &d{server} &fand must be &cBan-Evading with &7{old_nick}"
 
+
+# DON'T CHANGE THE VERSION
 config_version: 1

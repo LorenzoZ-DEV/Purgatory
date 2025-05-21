@@ -21,10 +21,9 @@ package it.vanixstudios.purgatory.listeners.mute;
  */
 
 
-import it.vanixstudios.purgatory.Purgatory;
 import it.vanixstudios.purgatory.manager.mute.MuteManager;
-import it.vanixstudios.purgatory.util.C;
-import it.vanixstudios.purgatory.util.TimeUtil;
+import it.vanixstudios.purgatory.util.strings.C;
+import it.vanixstudios.purgatory.util.duration.TimeUtil;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.plugin.Listener;

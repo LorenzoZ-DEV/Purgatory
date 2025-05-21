@@ -1,12 +1,6 @@
 package it.vanixstudios.purgatory;
 
 import com.mongodb.client.MongoCollection;
-import dev.dejvokep.boostedyaml.YamlDocument;
-import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
-import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
-import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
-import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
-import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import it.vanixstudios.purgatory.cmds.Mute.CheckMuteCommand;
 import it.vanixstudios.purgatory.cmds.Mute.MuteCommand;
 import it.vanixstudios.purgatory.cmds.Mute.TempMuteCommand;
@@ -29,15 +23,15 @@ import it.vanixstudios.purgatory.manager.mute.MuteManager;
 import it.vanixstudios.purgatory.model.ProfileManager;
 import it.vanixstudios.purgatory.storage.MongoManager;
 import it.vanixstudios.purgatory.tasks.BanActionBarTask;
-import it.vanixstudios.purgatory.util.Art;
-import it.vanixstudios.purgatory.util.Logger;
+import it.vanixstudios.purgatory.util.checker.UpdateChecker;
+import it.vanixstudios.purgatory.util.console.Art;
+import it.vanixstudios.purgatory.util.console.Logger;
 import lombok.Getter;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
-import org.yaml.snakeyaml.Yaml;
 import revxrsal.commands.Lamp;
 import revxrsal.commands.bungee.BungeeLamp;
 import revxrsal.commands.bungee.actor.BungeeCommandActor;
@@ -91,6 +85,7 @@ public final class Purgatory extends Plugin {
             ProxyServer.getInstance().stop();
             return;
         }
+        UpdateChecker.checkForUpdates();
         Logger.info("&aPlugin started successfully!");
         Art.asciiArt();
         ProxyServer.getInstance().getScheduler().schedule(

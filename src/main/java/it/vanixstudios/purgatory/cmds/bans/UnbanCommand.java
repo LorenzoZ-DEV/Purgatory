@@ -2,7 +2,7 @@ package it.vanixstudios.purgatory.cmds.bans;
 
 import it.vanixstudios.purgatory.Purgatory;
 import it.vanixstudios.purgatory.manager.BanManager;
-import it.vanixstudios.purgatory.util.C;
+import it.vanixstudios.purgatory.util.strings.C;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.ProxyServer;
 import org.bson.Document;
