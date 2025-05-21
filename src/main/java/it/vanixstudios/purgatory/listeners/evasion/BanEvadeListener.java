@@ -94,9 +94,7 @@ public class BanEvadeListener implements Listener {
             Collection<ProxiedPlayer> players = ProxyServer.getInstance().getPlayers();
             for (ProxiedPlayer p : players) {
                 if (p.hasPermission("purgatory.staff")) {
-                    String message = "§c[ALERT] Ban Evade detected! Player §f" + player.getName() +
-                            " §chas IP §f" + playerIP + " §cused by banned player §f" + bannedName +
-                            " §cfor reason: §f" + reason;
+                    String message = Purgatory.getConfigManager().getMessages().getString("ban.ban_evading_alert","&7(&e!&7) &7{ban_evador} &fjoined to &d{server} &fand must be &cBan-Evading with &7{old_nick}").replace("{ban_evador}", bannedName).replace("{server}", player.getServer().getInfo().getName()).replace("{old_nick}", player.getName());
                     p.sendMessage(message);
                     Logger.debug(message);
                 }

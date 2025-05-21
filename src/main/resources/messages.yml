@@ -59,5 +59,6 @@ general:
   player_not_found: "&cPlayer not found."
   player_must_be_online: "&cPlayer must be online."
   invalid_duration: "&cInvalid duration. Use formats like 10m, 1h, 2d."
+  ban_evading_alert: " &7(&e!&7) &7{ban_evador} &fjoined to &d{server} &fand must be &cBan-Evading with &7{old_nick}"
 
 config_version: 1
