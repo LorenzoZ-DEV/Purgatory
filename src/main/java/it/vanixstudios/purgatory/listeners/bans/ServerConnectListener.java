@@ -1,5 +1,6 @@
 package it.vanixstudios.purgatory.listeners.bans;
 
+import it.vanixstudios.purgatory.Purgatory;
 import it.vanixstudios.purgatory.manager.BanManager;
 import it.vanixstudios.purgatory.util.Logger;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -17,7 +18,7 @@ public class ServerConnectListener implements Listener {
     public void onServerConnect(ServerConnectEvent event) {
         ProxiedPlayer player = event.getPlayer();
         if (banManager.isBanned(player.getUniqueId())) {
-            ServerInfo jailServer = ProxyServer.getInstance().getServerInfo("Jail");
+            ServerInfo jailServer = Purgatory.getConfigManager().getConfig().getString("JAILSYSTEM.server-jail","Jail").equalsIgnoreCase("") ? null : ProxyServer.getInstance().getServerInfo("Jail");
             if (jailServer != null) {
                 event.setTarget(jailServer);
             } else {

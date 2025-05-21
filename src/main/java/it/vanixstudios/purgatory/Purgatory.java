@@ -1,6 +1,12 @@
 package it.vanixstudios.purgatory;
 
 import com.mongodb.client.MongoCollection;
+import dev.dejvokep.boostedyaml.YamlDocument;
+import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
+import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
+import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
+import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
+import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import it.vanixstudios.purgatory.cmds.Mute.CheckMuteCommand;
 import it.vanixstudios.purgatory.cmds.Mute.MuteCommand;
 import it.vanixstudios.purgatory.cmds.Mute.TempMuteCommand;
@@ -18,22 +24,26 @@ import it.vanixstudios.purgatory.listeners.bans.ServerConnectListener;
 import it.vanixstudios.purgatory.listeners.evasion.BanEvadeListener;
 import it.vanixstudios.purgatory.listeners.mute.ChatListener;
 import it.vanixstudios.purgatory.manager.BanManager;
+import it.vanixstudios.purgatory.manager.config.ConfigManager;
 import it.vanixstudios.purgatory.manager.mute.MuteManager;
 import it.vanixstudios.purgatory.model.ProfileManager;
 import it.vanixstudios.purgatory.storage.MongoManager;
 import it.vanixstudios.purgatory.tasks.BanActionBarTask;
 import it.vanixstudios.purgatory.util.Art;
 import it.vanixstudios.purgatory.util.Logger;
+import lombok.Getter;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
+import org.yaml.snakeyaml.Yaml;
 import revxrsal.commands.Lamp;
 import revxrsal.commands.bungee.BungeeLamp;
 import revxrsal.commands.bungee.actor.BungeeCommandActor;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.util.List;
 
 public final class Purgatory extends Plugin {
@@ -44,6 +54,12 @@ public final class Purgatory extends Plugin {
     private MuteManager muteManager;
     private MongoManager mongoManager;
     private ProfileManager profileManager;
+    @Getter
+    private static final ConfigManager configManager = new ConfigManager();
+
+    @Getter
+    private Path dataDirectory;
+
 
     public static Purgatory getInstance() {
         return Purgatory.instance;
@@ -52,12 +68,29 @@ public final class Purgatory extends Plugin {
     @Override
     public void onEnable() {
         instance = this;
-
         Logger.info("&aStarting the plugin...");
+
+        // Initialize dataDirectory before using it
+        this.dataDirectory = getDataFolder().toPath();
+
         createStorageFile();
         loadMongoConnection();
-        registerlistener();
+        registerListener();
         registerCommands();
+        try{
+            configManager.loadMessages();
+            configManager.loadConfig();
+            ConfigManager.load();
+            Logger.info("&aLoaded config.yml file.");
+            Logger.info("&aLoaded messages.yml file.");
+
+        } catch (Exception e){
+            Logger.error("Error loading config.yml: " + e.getMessage());
+            e.printStackTrace();
+            Logger.info("&cShutting down plugin...");
+            ProxyServer.getInstance().stop();
+            return;
+        }
         Logger.info("&aPlugin started successfully!");
         Art.asciiArt();
         ProxyServer.getInstance().getScheduler().schedule(
@@ -88,7 +121,7 @@ public final class Purgatory extends Plugin {
         }
     }
 
-    private void registerlistener() {
+    private void registerListener() {
         List.of(
                 new PlayerLoginListener(),
                 new ServerConnectListener(),
@@ -143,8 +176,10 @@ public final class Purgatory extends Plugin {
                     new HistoryCommand(banManager),
                     new BanListCommand(),
                     new CheckBanCommand(banManager),
-                    new UnbanCommand(banManager), new AltsCommand(), new KickCommand(), new PurgatoryCmd()
-
+                    new UnbanCommand(banManager),
+                    new AltsCommand(),
+                    new KickCommand(),
+                    new PurgatoryCmd()
             );
         } else {
             Logger.error("BanManager is not initialized. Ban-related commands will not be registered.");
@@ -156,7 +191,6 @@ public final class Purgatory extends Plugin {
                     new TempMuteCommand(muteManager),
                     new UnMuteCommand(muteManager),
                     new CheckMuteCommand(muteManager)
-
             );
         } else {
             Logger.error("MuteManager is not initialized. Mute-related commands will not be registered.");
@@ -166,7 +200,6 @@ public final class Purgatory extends Plugin {
                 mongoManager.getDatabase().getCollection("blacklist") : null;
 
         if (blacklistCollection != null) {
-
             lamp.register(
                     new BlacklistCommand(),
                     new BlacklistInfoCommand(),
@@ -177,7 +210,6 @@ public final class Purgatory extends Plugin {
         }
 
     }
-
     @Override
     public void onDisable() {
         Logger.info("&cShutting down plugin...");
@@ -213,4 +245,5 @@ public final class Purgatory extends Plugin {
     public ProfileManager getProfileManager() {
         return this.profileManager;
     }
+
 }

@@ -16,7 +16,7 @@ import revxrsal.commands.bungee.annotation.CommandPermission;
 import java.util.Arrays;
 import java.util.Date;
 
-@Command("blacklist")
+@Command({"blacklist","bl"})
 public class BlacklistCommand {
 
     @Usage("blacklist <player> <reason> [-p|-s]")
@@ -47,10 +47,9 @@ public class BlacklistCommand {
                 .insertOne(doc);
 
         Logger.info("&cBlacklisted player " + playerName + " for: " + reason);
-        actor.reply(C.translate("&aYou blacklisted &f" + playerName + "&a for: &f" + reason));
+        actor.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("blacklist.blacklist_sender_notification","&aYou have blacklisted &c&l{target} &afor &c&l{reason} ").replace("{target}", playerName).replace("{reason}", reason)));
 
-        String message = String.format("&e%s &chas been permanently blacklisted by &e%s&c. Reason: &e%s",
-                playerName, actor.name(), reason);
+        String message = String.format(Purgatory.getConfigManager().getMessages().getString("blacklist.blacklist_notification","&7{target} &ahas been permanently blacklisted by &7{issuer}").replace("{target}", playerName).replace("{issuer}", actor.name()));
 
         if (silent) {
             notifyStaff("&7[Silent] " + message);
@@ -59,12 +58,7 @@ public class BlacklistCommand {
         }
 
         if (target != null) {
-            String kickMessage = C.translate(
-                    "&c&lYour account was Blacklisted from X-NETWORK\n\n" +
-                            "&c&lThis punishment is not contestable\n" +
-                            "&c&lIf you think this is a mistake, please contact support.\n\n" +
-                            "&7Reason: &c" + reason
-            );
+            String kickMessage = C.translate(Purgatory.getConfigManager().getMessages().getString("blacklist.blacklist_disconnect","&cYou have been blacklisted from the server. \n Reason: &e{reason}").replace("{reason}", reason));
             target.disconnect(kickMessage);
         }
     }

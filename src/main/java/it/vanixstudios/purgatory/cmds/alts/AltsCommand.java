@@ -30,7 +30,7 @@ public class AltsCommand {
         Set<UUID> alts = profile.getAlts();
 
         if (alts.isEmpty()) {
-            actor.reply(C.translate("&aNo alternate accounts found for player §f") + playerName);
+            actor.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("alts.no_alts_found", "&aNo alternate accounts found for &c{target}").replace("{target}", targetPlayer.getName())));
             return;
         }
 
@@ -54,7 +54,7 @@ public class AltsCommand {
             if (alts.size() <= index) builder.append("&7, ");
         }
 
-        actor.reply(C.translate("&7" + profile.getName() + "'s Alts &7(Offline, &cBanned&7, &aOnline&7):"));
+        actor.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("alts.alt_found","&7{target}'s Alts &8(&aOnline, &cBanned&7, &aOnline&8):").replace("{target}", targetPlayer.getName())));
         actor.reply(C.translate(builder.toString()));
     }
 }

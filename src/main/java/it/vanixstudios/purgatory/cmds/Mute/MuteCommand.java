@@ -1,5 +1,6 @@
 package it.vanixstudios.purgatory.cmds.Mute;
 
+import it.vanixstudios.purgatory.Purgatory;
 import it.vanixstudios.purgatory.manager.mute.MuteManager;
 import it.vanixstudios.purgatory.util.C;
 import net.md_5.bungee.api.ProxyServer;
@@ -29,20 +30,20 @@ public class MuteCommand {
 
         ProxiedPlayer target = ProxyServer.getInstance().getPlayer(playerName);
         if (target == null) {
-            sender.reply(C.translate("&cPlayer not found."));
+            sender.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("general.player_not_found","&cPlayer not found")));
             return;
         }
 
         UUID uuid = target.getUniqueId();
         if (muteManager.isMuted(uuid)) {
-            sender.reply(C.translate("&cThat player is already muted."));
+            sender.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("mute.already_muted","&cPlayer already muted")));
             return;
         }
 
         muteManager.mutePlayer(uuid, reason);
 
-        sender.reply(C.translate("&aPermanently muted &f" + target.getName() + "&a. Reason: &f" + reason));
-        target.sendMessage(C.translate("&cYou have been permanently muted. Reason: &f" + reason));
+        sender.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("mute.mute_sender_notification","&aYou permamently muted &f{target} &afor period FOREVER for reason: {reason}").replace("{target}", target.getName()).replace("{reason}", reason)));
+        target.sendMessage(C.translate(Purgatory.getConfigManager().getMessages().getString("mute.mute_message_player","&cYou have been permanently muted. Reason: &f {reason} ").replace("{reason}", reason)));
 
         boolean silent = true;
         for (String flag : flags) {
@@ -52,7 +53,7 @@ public class MuteCommand {
             }
         }
 
-        String message = C.translate("&e" + target.getName() + " &chas been permanently muted by &e" + sender.name() + "&c. Reason: &e" + reason);
+        String message = C.translate(Purgatory.getConfigManager().getMessages().getString("mute.mute_notification","&7{target} &ahas been permanently muted by &7{issuer} &aReason: &e{reason}").replace("{target}", target.getName()).replace("{issuer}", sender.name()).replace("{reason}", reason));
 
         if (silent) {
             ProxyServer.getInstance().getPlayers().stream()

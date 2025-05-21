@@ -5,6 +5,7 @@ package it.vanixstudios.purgatory.listeners.bans;
  * discord.gg/vanixstudios
  */
 
+import it.vanixstudios.purgatory.Purgatory;
 import it.vanixstudios.purgatory.manager.BanManager;
 import it.vanixstudios.purgatory.util.C;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -44,7 +45,7 @@ public class CommandBlacklistListener implements Listener {
 
         if (blockedCommands.contains(command) && banManager.isBanned(player.getUniqueId())) {
             event.setCancelled(true);
-            player.sendMessage(C.translate("&cYou are banned from the server and cannot use this command."));
+            player.sendMessage(C.translate(Purgatory.getConfigManager().getMessages().getString("ban.ban_command_notallowed","&cYou are banned from the server and cannot use this command.")));
         }
     }
 }

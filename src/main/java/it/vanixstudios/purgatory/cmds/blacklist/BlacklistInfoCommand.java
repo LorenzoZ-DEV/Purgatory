@@ -14,7 +14,7 @@ import java.util.Date;
 
 
 public class BlacklistInfoCommand {
-    @Command("blacklistinfo")
+    @Command({"blacklistinfo","blinfo"})
     @Description("Shows blacklist information of a player")
     @Usage("blacklistinfo <player>")
 
@@ -25,7 +25,7 @@ public class BlacklistInfoCommand {
                 .first();
 
         if (doc == null) {
-            sender.reply(C.translate("&cPlayer &f" + targetName + " &cis not in the blacklist."));
+            sender.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("blacklist.not_blacklist","&f{target} &cis not in blacklist").replace("{target}", targetName)));
             return;
         }
 

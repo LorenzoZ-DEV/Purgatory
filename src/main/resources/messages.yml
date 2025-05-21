@@ -1,0 +1,63 @@
+ban:
+  already_banned: "&e{target} &cis already banned."
+  ban_sender_notification: "&aYou permanently banned &f{target} &afor period FOREVER for reason: {reason}"
+  tempban_sender_notification: "&aYou temporarily banned &f{target} &afor period {duration} for reason: {reason}"
+  ban_notification: "&7{target} &ahas been permanently banned by &7{issuer}. &aReason: &e{reason}"
+  tempban_notification: "&7{target} &ahas been temporarily banned by &7{issuer}. &afor {duration} &aReason: &e{reason}"
+  no_ban_found: "&cNo ban found for player &e{target}"
+  unban_sender_notification: "&aYou have unbanned &f{target}"
+  unban_notification: "&7{target} &ahas been unbanned by &7{issuer}"
+  ban_command_notallowed: "&cYou are banned from the server and cannot use this command."
+  ban_disconnect: |-
+    &c&lYour account has been suspended
+    &c&lfrom the &c&lX-Network&c.
+    
+    &4Purchase an unban @ store.x-network.org
+    
+    &7Reason: &e{reason}
+  tempban_disconnect: |-
+    &c&lYour account has been temporarily suspended
+    &c&lfrom the &c&lX-Network&c.
+    &c&lYou have been banned for {duration}
+    
+    &4Purchase an unban @ store.x-network.org
+    
+    &7Reason: {reason}
+
+blacklist:
+  blacklist_sender_notification: "&aYou have blacklisted &c&l{target} &afor &c&l{reason} "
+  unblacklist_sender_notification: "&aYou have unblacklisted &c&l{target}"
+  blacklist_notification: "&7{target} &ahas been permanently blacklisted by &7{issuer}"
+  unblacklist_notification: "&7{target} &ahas been unblackliisted by &7{issuer}"
+  not_blacklist: "&f{target} &cis not in blacklist"
+  blacklist_disconnect: |-
+    &c&lYour account was Blacklisted from X-NETWORK
+    &c&lThis punishment is not contestable
+    &c&lIf you think this is a mistake, please contact support.
+mute:
+  mute_sender_notification: "&aYou permanently muted &f{target} &afor period FOREVER for reason: {reason}"
+  tempmute_sender_notification: "&aYou temporarily muted &f{target} &afor period {duration} for reason: {reason}"
+  mute_notification: "&7{target} &ahas been permanently muted by &7{issuer}. &aReason: &e{reason}"
+  tempmute_notification: "&7{target} &ahas been temporarily muted by &7{issuer} &afor &f{duration}. &aReason: &e{reason}"
+  unmute_notification: "&7{target} &ahas been unmuted by &7{issuer}"
+  mute_message_player: "&cYou have been permanently muted. Reason: &f{reason}"
+  tempmute_message_player: "&cYou have been temporarily muted for {duration}&c. Reason: &f{reason}"
+  muted_already: "&cPlayer is already muted."
+  not_muted: "&f{target} &cis not muted."
+  unmute_sender_notification: "&aYou have unmuted &f{target}."
+  unmute_message_player: "&aYou have been unmuted."
+
+kick:
+  player_kick_message: "&cYou have been kicked from the server.\n&7Reason: &c{reason}"
+  kick_sender_notification: "&aYou kicked &e{target} &afor {reason}"
+  kick_notification: "&7{target} &ahas been kicked by &7{sender}. &aReason: &e{reason}"
+
+alts:
+  no_alts_found: "&aNo alternate accounts found for &c{target}"
+  alt_found: "&7{target}'s Alts &8(&aOnline, &cBanned&7, &aOnline&8):"
+general:
+  player_not_found: "&cPlayer not found."
+  player_must_be_online: "&cPlayer must be online."
+  invalid_duration: "&cInvalid duration. Use formats like 10m, 1h, 2d."
+
+config_version: 1

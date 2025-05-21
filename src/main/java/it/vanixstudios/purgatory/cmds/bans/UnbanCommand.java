@@ -1,5 +1,6 @@
 package it.vanixstudios.purgatory.cmds.bans;
 
+import it.vanixstudios.purgatory.Purgatory;
 import it.vanixstudios.purgatory.manager.BanManager;
 import it.vanixstudios.purgatory.util.C;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -27,7 +28,7 @@ public class UnbanCommand {
         this.banManager = banManager;
     }
 
-    @Command("unban")
+    @Command({"unban","unjail","unb"})
     @Usage("unban <player> [-p|-s]")
     @CommandPermission("purgatory.ban")
     public void unban(BungeeCommandActor actor, String playerName, @Optional String... args) {
@@ -36,7 +37,7 @@ public class UnbanCommand {
                 .first();
 
         if (doc == null) {
-            actor.reply(C.translate("&cNo ban found for player &e" + playerName + "&c."));
+            actor.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("ban.no_ban_found", "&cNo ban found for &e{player}").replace("{player}", playerName)));
             return;
         }
 
@@ -49,12 +50,12 @@ public class UnbanCommand {
         }
 
         if (!banManager.isBanned(uuid)) {
-            actor.reply(C.translate("&cPlayer &e" + playerName + " &cis not currently banned."));
+            actor.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("ban.no_ban_found", "&cNo ban found for &e{player}").replace("{player}", playerName)));
             return;
         }
 
         banManager.unban(uuid);
-        actor.reply(C.translate("&aYou unbanned &e" + playerName + " &asuccessfully."));
+        actor.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("ban.unban_sender_notification","&aYou have unbanned &f{target}").replace("{target}", playerName)));
 
         ProxiedPlayer target = ProxyServer.getInstance().getPlayer(uuid);
         if (target != null && target.isConnected()) {
@@ -69,7 +70,7 @@ public class UnbanCommand {
         }
 
 
-        String message = C.translate("&e" + playerName + " &cwas unbanned by &e" + actor.name() + ".");
+        String message = C.translate(Purgatory.getConfigManager().getMessages().getString("ban.unban_notification","&7{target} &ahas been unbanned by &7{issuer}.").replace("{target}", playerName).replace("{issuer}", actor.name()));
 
         if (silent) {
             ProxyServer.getInstance().getPlayers().stream()

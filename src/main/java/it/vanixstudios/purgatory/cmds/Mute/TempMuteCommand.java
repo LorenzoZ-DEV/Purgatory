@@ -1,5 +1,6 @@
 package it.vanixstudios.purgatory.cmds.Mute;
 
+import it.vanixstudios.purgatory.Purgatory;
 import it.vanixstudios.purgatory.manager.mute.MuteManager;
 import it.vanixstudios.purgatory.util.C;
 import it.vanixstudios.purgatory.util.TimeUtil;
@@ -28,12 +29,12 @@ public class TempMuteCommand {
 
         ProxiedPlayer target = ProxyServer.getInstance().getPlayer(playerName);
         if (target == null || !target.isConnected()) {
-            actor.reply(C.translate("&cPlayer must be online."));
+            actor.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("general.player_must_be_online","&cPlayer must be online")));
             return;
         }
 
         if (muteManager.isMuted(target.getUniqueId())) {
-            actor.reply(C.translate("&cThat player is already muted."));
+            actor.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("mute.muted_already","&cPlayer already muted")));
             return;
         }
 
@@ -41,20 +42,20 @@ public class TempMuteCommand {
         try {
             duration = TimeUtil.parseTime(durationStr);
         } catch (IllegalArgumentException e) {
-            actor.reply(C.translate("&cInvalid duration. Use formats like 10m, 1h, 2d."));
+            actor.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("general.invalid_duration","&cInvalid duration. Use formats like 10m, 1h, 2d.")));
             return;
         }
 
         if (duration <= 0) {
-            actor.reply(C.translate("&cInvalid duration."));
+            actor.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("general.invalid_duration","&cInvalid duration. Use formats like 10m, 1h, 2d.")));
             return;
         }
 
         muteManager.tempMutePlayer(target.getUniqueId(), reason, duration);
 
         String formattedDuration = TimeUtil.formatDuration(duration);
-        actor.reply(C.translate("&aYou temporarily muted &f" + playerName + " &afor &f" + formattedDuration + "&a. Reason: &f" + reason));
-        target.sendMessage(C.translate("&cYou have been temporarily muted for &f" + formattedDuration + "&c. Reason: &f" + reason));
+        actor.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("mute.tempmute_sender_notification","&aYou temporarily muted &f{target} &afor period {duration} for reason: {reason}").replace("{target}", target.getName()).replace("{duration}", formattedDuration).replace("{reason}", reason)));
+        target.sendMessage(C.translate(Purgatory.getConfigManager().getMessages().getString("mute.tempmute_message_player","&cYou have been temporarily muted for {duration}. Reason: &f {reason} ").replace("{duration}", formattedDuration).replace("{reason}", reason)));
 
         boolean silent = true;
         for (String flag : flags) {
@@ -64,8 +65,7 @@ public class TempMuteCommand {
             }
         }
 
-        String message = C.translate("&e" + playerName + " &chas been temporarily muted by &e" + actor.name() +
-                " &cfor &f" + formattedDuration + "&c. Reason: &e" + reason);
+        String message = C.translate(Purgatory.getConfigManager().getMessages().getString("mute.tempmute_notification","&7{target} &ahas been temporally muted by &7{issuer} &ffor &f{duratiom} &aReason: &e{reason}").replace("{target}", target.getName()).replace("{issuer}", actor.name()).replace("{duration}", formattedDuration).replace("{reason}", reason));
 
         if (silent) {
             ProxyServer.getInstance().getPlayers().stream()

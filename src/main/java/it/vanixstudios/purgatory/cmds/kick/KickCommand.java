@@ -1,5 +1,6 @@
 package it.vanixstudios.purgatory.cmds.kick;
 
+import it.vanixstudios.purgatory.Purgatory;
 import it.vanixstudios.purgatory.util.C;
 import it.vanixstudios.purgatory.util.Logger;
 import net.md_5.bungee.api.ProxyServer;
@@ -24,7 +25,7 @@ public class KickCommand {
         ProxiedPlayer target = ProxyServer.getInstance().getPlayer(targetName);
 
         if (target == null) {
-            sender.reply(C.translate("&cPlayer &e" + targetName + " &cnot found or offline."));
+            sender.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("general.player_not_found","&cPlayer not found")));
             return;
         }
 
@@ -40,12 +41,12 @@ public class KickCommand {
             }
         }
 
-        String kickMessage = C.translate("&cYou have been kicked from the server.\n&7Reason: &c" + reason);
+        String kickMessage = C.translate(Purgatory.getConfigManager().getMessages().getString("kick.player_kick_message","&cYou have been kicked from the server. \n Reason: &e{reason}").replace("{reason}", reason));
         target.disconnect(kickMessage);
 
-        String logMessage = "&e" + targetName + " &cwas kicked by &e" + sender.name() + "&c. Reason: &e" + reason;
+        String logMessage = Purgatory.getConfigManager().getMessages().getString("kick_notification","&7{target} &ahas been kicked by &7{sender}. &a Reason: {reason}").replace("{target}", targetName).replace("{sender}", sender.name()).replace("{reason}", reason);
 
-        sender.reply(C.translate("&aYou kicked &e" + targetName + "&a for: &e" + reason));
+        sender.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("kick.player_kick_notification","&aYou kicked &f{target} &afor: &f{reason}").replace("{target}", targetName).replace("{reason}", reason)));
         Logger.info(sender.name() + " kicked player " + targetName + " for: " + reason);
 
         if (silent) {

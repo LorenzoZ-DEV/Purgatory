@@ -2,18 +2,4 @@ JAILSYSTEM:
   server-jail: "Jail"
   lobby-server: "Hub-01"
 
-PUNISHMENTS:
-  tempban:
-    permission: purgatory.trialstaff
-    duration: 30d
-    enabled: true
-  tempmute:
-    permission: purgatory.trialstaff
-    duration: 14d
-    enabled: true
-
-SETTINGS:
-  jail-banip: false
-  ban-silent: true
-  mute-silent: true
-  kick-silent: true
+config_version: 1

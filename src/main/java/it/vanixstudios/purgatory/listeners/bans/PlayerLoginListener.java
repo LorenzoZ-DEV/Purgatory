@@ -30,13 +30,7 @@ public class PlayerLoginListener implements Listener {
         Document doc = blacklistCollection.find(new Document("uuid", player.getUniqueId().toString())).first();
         if (doc != null) {
             String reason = doc.getString("reason");
-            player.disconnect( C.translate ( """
-                    &c&lYou are Account was Blacklisted from X-NETWORK
-                    &r
-                    &c&lThis punishment is not contestable
-                    &c&lIf you think this is a mistake, please contact support.
-                    
-                    """));
+            player.disconnect( C.translate(Purgatory.getConfigManager().getMessages().getString("blacklist.blacklist_disconnect","&cYou have been blacklisted from the server. \n Reason: &e{reason}").replace("{reason}", reason)));
             return;
         }
 
@@ -50,7 +44,7 @@ public class PlayerLoginListener implements Listener {
         ProxiedPlayer player = event.getPlayer();
 
         if (banManager != null && banManager.isBanned(player.getUniqueId())) {
-            ServerInfo jailServer = ProxyServer.getInstance().getServerInfo("Jail");
+            ServerInfo jailServer = Purgatory.getConfigManager().getConfig().getString("JAILSYSTEM.server-jail","Jail").equalsIgnoreCase("") ? null : ProxyServer.getInstance().getServerInfo("Jail");
             if (jailServer != null) {
                 Logger.debug("Redirecting banned player " + player.getName() + " to Jail server.");
                 event.setTarget(jailServer);
@@ -65,7 +59,7 @@ public class PlayerLoginListener implements Listener {
         ProxiedPlayer player = event.getPlayer();
 
         if (banManager.isBanned(player.getUniqueId())) {
-            ServerInfo jailServer = ProxyServer.getInstance().getServerInfo("Jail");
+            ServerInfo jailServer = Purgatory.getConfigManager().getConfig().getString("JAILSYSTEM.server-jail","").equalsIgnoreCase("") ? null : ProxyServer.getInstance().getServerInfo("Jail");
 
             if (jailServer != null && !player.getServer().getInfo().getName().equalsIgnoreCase("Jail")) {
                 Logger.warning("Banned player " + player.getName() + " tried to switch to " +

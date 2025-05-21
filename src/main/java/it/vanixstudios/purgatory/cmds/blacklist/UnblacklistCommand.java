@@ -2,6 +2,7 @@ package it.vanixstudios.purgatory.cmds.blacklist;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
+import it.vanixstudios.purgatory.Purgatory;
 import it.vanixstudios.purgatory.util.C;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
@@ -19,7 +20,7 @@ public class UnblacklistCommand {
         this.blacklistCollection = blacklistCollection;
     }
 
-    @Command("unblacklist")
+    @Command({"unblacklist","unbl"})
     @Usage("unblacklist <player> [-p|-s]")
     @CommandPermission("purgatory.unblacklist")
     @Description("Remove a player from the blacklist")
@@ -32,7 +33,7 @@ public class UnblacklistCommand {
         var found = blacklistCollection.find(Filters.eq("name", targetName)).first();
 
         if (found == null) {
-            sender.sendMessage(C.translate("&cPlayer not found in blacklist."));
+            sender.sendMessage(C.translate(Purgatory.getConfigManager().getMessages().getString("blacklist.not_blacklist","&f{target} &cis not in blacklist").replace("{target}", targetName)));
             return;
         }
 
@@ -43,9 +44,9 @@ public class UnblacklistCommand {
         }
 
         blacklistCollection.deleteOne(Filters.eq("name", targetName));
-        sender.sendMessage(C.translate("&aYou unblacklisted &e" + targetName + "&a."));
+        sender.sendMessage(C.translate(Purgatory.getConfigManager().getMessages().getString("blacklist.unblacklist_sender_notification","&aYou have unblacklisted &f{target}").replace("{target}", targetName)));
 
-        String message = C.translate("&e" + targetName + " &ahas been unblacklisted by &e" + sender.getName() + "&a.");
+        String message = C.translate(Purgatory.getConfigManager().getMessages().getString("unblacklist_notification","\"&7{target} &ahas been unblackliisted by &7{issuer}").replace("{target}", targetName).replace("{issuer}", sender.getName()));
 
         if (silent) {
             ProxyServer.getInstance().getPlayers().stream()

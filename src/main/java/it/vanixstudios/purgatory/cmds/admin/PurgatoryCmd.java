@@ -1,12 +1,15 @@
 package it.vanixstudios.purgatory.cmds.admin;
 
 import it.vanixstudios.purgatory.Purgatory;
+import it.vanixstudios.purgatory.manager.config.ConfigManager;
 import it.vanixstudios.purgatory.util.C;
 import revxrsal.commands.annotation.Command;
 import revxrsal.commands.annotation.Subcommand;
 import revxrsal.commands.annotation.Usage;
 import revxrsal.commands.bungee.annotation.CommandPermission;
 import revxrsal.commands.command.CommandActor;
+
+import java.io.IOException;
 
 public class PurgatoryCmd
 {
@@ -26,5 +29,17 @@ public class PurgatoryCmd
                 """
 
         ));
+    }
+    @Command("purgatory reload")
+    @CommandPermission("purgatory.admin")
+    public void onPurgatoryReload(CommandActor sender) throws IOException {
+        try{
+            sender.reply(C.translate("&aReloading Purgatory..."));
+            Purgatory.getConfigManager().reload();
+            sender.reply(C.translate("&aPurgatory reloaded!"));
+        } catch (Exception e) {
+            sender.reply(C.translate("&cAn error occurred while reloading Purgatory!"));
+        }
+
     }
 }

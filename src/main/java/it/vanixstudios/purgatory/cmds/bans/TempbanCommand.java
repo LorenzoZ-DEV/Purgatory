@@ -1,5 +1,6 @@
 package it.vanixstudios.purgatory.cmds.bans;
 
+import it.vanixstudios.purgatory.Purgatory;
 import it.vanixstudios.purgatory.manager.BanManager;
 import it.vanixstudios.purgatory.util.C;
 import it.vanixstudios.purgatory.util.TimeUtil;
@@ -21,14 +22,14 @@ public class TempbanCommand {
         this.banManager = banManager;
     }
 
-    @Command("tempban")
+    @Command({"tempban","tempjail","tb"})
     @CommandPermission("purgatory.ban")
     @Usage("tempban <player> <duration> <reason> [-p|-s]")
     public void executeTempban(BungeeCommandActor actor, String playerName, String durationArg, @Optional String reason) {
         UUID uuid = banManager.getOrCreateUUID(playerName);
 
         if (banManager.isBanned(uuid)) {
-            actor.reply(C.translate("&cPlayer &e" + playerName + " &cis already banned."));
+            actor.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("ban.already_banned","&e{target} &calready banned").replace("{target}", playerName)));
             return;
         }
 
@@ -36,7 +37,7 @@ public class TempbanCommand {
         try {
             duration = TimeUtil.parseTime(durationArg);
         } catch (IllegalArgumentException e) {
-            actor.reply(C.translate("&cInvalid duration. Use formats like 1s, 5m, 2h, 3d, 1w, 1mo, 1y."));
+            actor.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("general.invalid_duration","&cInvalid duration. Use formats like 10m, 1h, 2d.")));
             return;
         }
 
@@ -55,23 +56,12 @@ public class TempbanCommand {
         ProxiedPlayer target = ProxyServer.getInstance().getPlayer(playerName);
         if (target != null && target.isConnected()) {
             banManager.sendToJail(target);
-            target.disconnect(C.translate("""
-                    &c&lYour account has been temporarily suspended
-                    &c&lfrom the &c&lX-Network&c.
-                    &c&lYou have been banned for %duration%
-
-                    &4Purchase an unban @ store.x-network.org
-
-                    &7Reason: %reason%
-                    """
-                    .replace("%duration%", durationArg)
-                    .replace("%reason%", finalReason)));
+            target.disconnect(C.translate(Purgatory.getConfigManager().getMessages().getString("ban.tempban_disconnect").replace("{reason}", finalReason).replace("{duration}", durationArg)));
         }
 
-        actor.reply(C.translate("&aPlayer &e" + playerName + " &ahas been tempbanned for &e" + durationArg + "&a."));
+        actor.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("ban.tempban_sender_notification").replace("{target}", playerName).replace("{duration}", durationArg).replace("{reason}", finalReason)));
 
-        String notification = String.format("&e%s &chas been tempbanned by &e%s &cfor &e%s&c. Reason: &e%s",
-                playerName, actor.name(), durationArg, finalReason);
+        String notification = String.format(Purgatory.getConfigManager().getMessages().getString("ban.tempban_notification","&7{target} &ahas been temporarily banned by &7{issuer}. &afor {duration} &aReason: &e{reason}").replace("{target}", playerName).replace("{issuer}", actor.name()).replace("{duration}", durationArg).replace("{reason}", finalReason));
 
         if (silent) {
             notifyStaff("&7[Silent] " + notification);

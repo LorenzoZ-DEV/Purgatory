@@ -27,7 +27,7 @@ public class HistoryCommand {
         this.banManager = banManager;
     }
 
-    @Command("history")
+    @Command({"history","hist"})
     @Usage("history <player>")
     @CommandPermission("purgatory.history")
     public void history(BungeeCommandActor actor, String playerName) {

@@ -1,5 +1,6 @@
 package it.vanixstudios.purgatory.cmds.Mute;
 
+import it.vanixstudios.purgatory.Purgatory;
 import it.vanixstudios.purgatory.manager.mute.MuteManager;
 import it.vanixstudios.purgatory.util.C;
 import it.vanixstudios.purgatory.util.TimeUtil;
@@ -27,13 +28,13 @@ public class CheckMuteCommand {
     public void onCheckMute(CommandActor actor, @Named("player") String playerName) {
         ProxiedPlayer target = ProxyServer.getInstance().getPlayer(playerName);
         if (target == null) {
-            actor.reply(C.translate("&cPlayer not found."));
+            actor.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("general.player_not_found","&cPlayer not found")));
             return;
         }
 
         UUID uuid = target.getUniqueId();
         if (!muteManager.isMuted(uuid)) {
-            actor.reply(C.translate("&aPlayer &f" + target.getName() + " &ais not muted."));
+            actor.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("mute.not_muted", "&f{target} &cis not muted.").replace("{target}", target.getName())));
             return;
         }
 

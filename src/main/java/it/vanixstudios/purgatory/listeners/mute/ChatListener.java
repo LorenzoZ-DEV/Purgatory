@@ -21,6 +21,7 @@ package it.vanixstudios.purgatory.listeners.mute;
  */
 
 
+import it.vanixstudios.purgatory.Purgatory;
 import it.vanixstudios.purgatory.manager.mute.MuteManager;
 import it.vanixstudios.purgatory.util.C;
 import it.vanixstudios.purgatory.util.TimeUtil;
@@ -58,6 +59,7 @@ public class ChatListener implements Listener
                 long remaining = muteManager.getTempMuteEnd(uuid) - System.currentTimeMillis();
                 player.sendMessage(C.translate("&cTime left: &f" + TimeUtil.formatDuration(remaining)));
             }
+            
         }
     }
 }

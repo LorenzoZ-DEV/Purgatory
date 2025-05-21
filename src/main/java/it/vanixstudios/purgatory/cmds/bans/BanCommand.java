@@ -1,5 +1,6 @@
 package it.vanixstudios.purgatory.cmds.bans;
 
+import it.vanixstudios.purgatory.Purgatory;
 import it.vanixstudios.purgatory.manager.BanManager;
 import it.vanixstudios.purgatory.util.C;
 import net.md_5.bungee.api.ProxyServer;
@@ -20,7 +21,7 @@ public class BanCommand {
         this.banManager = banManager;
     }
 
-    @Command("ban")
+    @Command({"ban","jail","b"})
     @CommandPermission("purgatory.ban")
     @Usage("ban <player> [reason] [-p|-s]")
     public void ban(BungeeCommandActor actor,
@@ -28,7 +29,7 @@ public class BanCommand {
                     @Optional String reason) {
 
         if (target == null) {
-            actor.reply(C.translate("&cTarget player not found."));
+            actor.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("general.player_not_found","&cPlayer not found")));
             return;
         }
 
@@ -36,7 +37,7 @@ public class BanCommand {
         String playerName = target.getName();
 
         if (banManager.isBanned(uuid)) {
-            actor.reply(C.translate("&cPlayer &e" + playerName + " &cis already banned."));
+            actor.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("ban.already_banned","&e{target} &calready banned").replace("{target}", playerName)));
             return;
         }
 
@@ -53,18 +54,11 @@ public class BanCommand {
         banManager.ban(uuid, playerName, finalReason);
         banManager.sendToJail(target);
 
-        target.disconnect(C.translate("""
-                &c&lYour account has been suspended
-                &c&lfrom the &c&lX-Network&c.
-                
-                &4Purchase an unban @ store.x-network.org
-                
-                &7Reason: """ + finalReason));
+        target.disconnect(C.translate(Purgatory.getConfigManager().getMessages().getString("ban.ban_disconnect").replace("{reason}", finalReason)));
 
-        actor.reply(C.translate("&aPlayer &e" + playerName + " &ahas been permanently banned."));
+        actor.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("ban.ban_sender_notification").replace("{target}", playerName).replace("{reason}", finalReason)));
 
-        String notification = String.format("&e%s &chas been permanently banned by &e%s&c. Reason: &e%s",
-                playerName, actor.name(), finalReason);
+        String notification = String.format(Purgatory.getConfigManager().getMessages().getString("ban.ban_notification").replace("{target}", playerName).replace("{issuer}", actor.name()).replace("{reason}", finalReason));
 
         if (silent) {
             notifyStaff("&7[Silent] " + notification);

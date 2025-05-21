@@ -27,7 +27,7 @@ public class CheckBanCommand {
         this.banManager = banManager;
     }
 
-    @Command("checkban")
+    @Command({"checkban","checkjail"})
     @Usage("checkban <player>")
     @CommandPermission("purgatory.checkban")
     public void checkBan(BungeeCommandActor actor, String playerName) {
