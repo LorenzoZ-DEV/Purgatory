@@ -10,13 +10,12 @@ import revxrsal.commands.annotation.*;
 import revxrsal.commands.bungee.actor.BungeeCommandActor;
 import revxrsal.commands.bungee.annotation.CommandPermission;
 
-import java.util.Arrays;
 import java.util.Date;
 
 @Command({"blacklist", "bl"})
 public class BlacklistCommand {
 
-    @Usage("blacklist <player> <reason> [-p|-s]")
+    @Usage("blacklist <player> <reason> [-s]")
     @Description("Blacklists a player permanently from the network.")
     @CommandPermission("purgatory.blacklist")
     public void execute(BungeeCommandActor actor,
