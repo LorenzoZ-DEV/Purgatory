@@ -21,11 +21,38 @@ public class TempMuteCommand {
     @Command("tempmute")
     @Usage("tempmute <player> <duration> <reason> [-p|-s]")
     @CommandPermission("purgatory.tempmute")
-    public void onTempMute(CommandActor actor,
-                           @Named("player") @Suggest("player") String playerName,
-                           @Named("duration") String durationStr,
-                           @Named("reason") String reason,
-                           @Optional String... flags) {
+    public void onTempMute(CommandActor actor, String[] args) {
+
+        if (args.length < 3) {
+            actor.reply(C.translate("&cUsage: /tempmute <player> <duration> <reason> [-p|-s]"));
+            return;
+        }
+
+        String playerName = args[0];
+        String durationStr = args[1];
+
+        // Ricostruisce la reason e cerca i flag
+        StringBuilder reasonBuilder = new StringBuilder();
+        boolean silent = true;
+
+        for (int i = 2; i < args.length; i++) {
+            if (args[i].equals("-p")) {
+                silent = false;
+            } else if (args[i].equals("-s")) {
+                silent = true;
+            } else {
+                if (reasonBuilder.length() > 0) {
+                    reasonBuilder.append(" ");
+                }
+                reasonBuilder.append(args[i]);
+            }
+        }
+
+        String cleanReason = reasonBuilder.toString();
+        if (cleanReason.isEmpty()) {
+            actor.reply(C.translate("&cYou must provide a reason!"));
+            return;
+        }
 
         ProxiedPlayer target = ProxyServer.getInstance().getPlayer(playerName);
         if (target == null || !target.isConnected()) {
@@ -51,21 +78,14 @@ public class TempMuteCommand {
             return;
         }
 
-        muteManager.tempMutePlayer(target.getUniqueId(), reason, duration);
+        muteManager.tempMutePlayer(target.getUniqueId(), cleanReason, duration);
 
         String formattedDuration = TimeUtil.formatDuration(duration);
-        actor.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("mute.tempmute_sender_notification","&aYou temporarily muted &f{target} &afor period {duration} for reason: {reason}").replace("{target}", target.getName()).replace("{duration}", formattedDuration).replace("{reason}", reason)));
-        target.sendMessage(C.translate(Purgatory.getConfigManager().getMessages().getString("mute.tempmute_message_player","&cYou have been temporarily muted for {duration}. Reason: &f {reason} ").replace("{duration}", formattedDuration).replace("{reason}", reason)));
+        actor.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("mute.tempmute_sender_notification","&aYou temporarily muted &f{target} &afor period {duration} for reason: {reason}").replace("{target}", target.getName()).replace("{duration}", formattedDuration).replace("{reason}", cleanReason)));
+        target.sendMessage(C.translate(Purgatory.getConfigManager().getMessages().getString("mute.tempmute_message_player","&cYou have been temporarily muted for {duration}. Reason: &f {reason} ").replace("{duration}", formattedDuration).replace("{reason}", cleanReason)));
 
-        boolean silent = true;
-        for (String flag : flags) {
-            if (flag.equalsIgnoreCase("-p")) {
-                silent = false;
-                break;
-            }
-        }
-
-        String message = C.translate(Purgatory.getConfigManager().getMessages().getString("mute.tempmute_notification","&7{target} &ahas been temporally muted by &7{issuer} &ffor &f{duratiom} &aReason: &e{reason}").replace("{target}", target.getName()).replace("{issuer}", actor.name()).replace("{duration}", formattedDuration).replace("{reason}", reason));
+        // Fix: correzione del typo "duratiom" -> "duration"
+        String message = C.translate(Purgatory.getConfigManager().getMessages().getString("mute.tempmute_notification","&7{target} &ahas been temporally muted by &7{issuer} &ffor &f{duration} &aReason: &e{reason}").replace("{target}", target.getName()).replace("{issuer}", actor.name()).replace("{duration}", formattedDuration).replace("{reason}", cleanReason));
 
         if (silent) {
             ProxyServer.getInstance().getPlayers().stream()

@@ -101,10 +101,10 @@ public class PurgatoryVelocity {
 
             MongoCollection bans = mongoManager.getDatabase().getCollection("bans");
 
-            banManager = new BanManager(bans);
-            muteManager = new MuteManager(mongoManager.getDatabase());
-            profileManager = new ProfileManager(this);
-            profileManager.load();
+           // banManager = new BanManager(bans);
+//            muteManager = new MuteManager(mongoManager.getDatabase());
+//            profileManager = new ProfileManager(this);
+//            profileManager.load();
 
             Logger.database("&aMongoDB connection successful.");
         } catch (IOException e) {
@@ -117,7 +117,7 @@ public class PurgatoryVelocity {
     }
     private void registerCommands(){
         Logger.info("&aRegistering commands...");
-        Lamp<VelocityCommandActor> lamp = VelocityLamp.builder(this).registerCommands().build();
+      //  Lamp<VelocityCommandActor> lamp = VelocityLamp.builder(this).registerCommands().build();
 
     }
 

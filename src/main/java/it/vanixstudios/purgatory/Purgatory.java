@@ -42,11 +42,15 @@ import java.util.List;
 
 public final class Purgatory extends Plugin {
 
+    @Getter
     private static Purgatory instance;
-
+    @Getter
     private BanManager banManager;
+    @Getter
     private MuteManager muteManager;
+    @Getter
     private MongoManager mongoManager;
+    @Getter
     private ProfileManager profileManager;
     @Getter
     private static final ConfigManager configManager = new ConfigManager();
@@ -222,21 +226,4 @@ public final class Purgatory extends Plugin {
 
         Logger.info("&cPlugin disabled.");
     }
-
-    public BanManager getBanManager() {
-        return this.banManager;
-    }
-
-    public MuteManager getMuteManager() {
-        return this.muteManager;
-    }
-
-    public MongoManager getMongoManager() {
-        return this.mongoManager;
-    }
-
-    public ProfileManager getProfileManager() {
-        return this.profileManager;
-    }
-
 }
