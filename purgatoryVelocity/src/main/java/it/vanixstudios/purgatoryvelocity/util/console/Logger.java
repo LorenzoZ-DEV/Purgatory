@@ -13,7 +13,7 @@ public class Logger {
         ProxyServer.getInstance().getLogger().warning("[PURGATORY] " + message);
     }
 
-    public static void error(String message, Exception e) {
+    public static void error(String message) {
         ProxyServer.getInstance().getLogger().severe("[PURGATORY] " + message);
     }
 

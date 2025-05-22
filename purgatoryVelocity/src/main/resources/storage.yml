@@ -30,3 +30,5 @@ MONGO:
   HOST: 127.0.0.1
   PORT: 27017
   DATABASE: 'bungee_bans'
+
+config_version: 1
