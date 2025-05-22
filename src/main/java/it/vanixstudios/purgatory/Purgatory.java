@@ -63,8 +63,6 @@ public final class Purgatory extends Plugin {
     public void onEnable() {
         instance = this;
         Logger.info("&aStarting the plugin...");
-
-        // Initialize dataDirectory before using it
         this.dataDirectory = getDataFolder().toPath();
 
         createStorageFile();

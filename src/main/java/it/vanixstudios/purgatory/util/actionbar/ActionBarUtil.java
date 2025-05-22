@@ -1,5 +1,6 @@
 package it.vanixstudios.purgatory.util.actionbar;
 
+import it.vanixstudios.purgatory.Purgatory;
 import it.vanixstudios.purgatory.manager.BanInfo;
 import it.vanixstudios.purgatory.manager.BanManager;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -27,10 +28,10 @@ public class ActionBarUtil {
 
     private static String createJailMessage(BanInfo banInfo) {
         if (banInfo.isPermanent()) {
-            return colorize("&cYou have gotten a life sentence for " + banInfo.getReason() + ".");
+            return colorize(Purgatory.getConfigManager().getMessages().getString("ban.action_bar_permanently","&cYou have got a life sentence for {reason}.").replace("{reason}", banInfo.getReason()));
         } else {
             String durationStr = formatDurationRemaining(banInfo);
-            return colorize("&cYou have been jailed for " + durationStr + " for " + banInfo.getReason() + ".");
+            return colorize(Purgatory.getConfigManager().getMessages().getString("ban.action_bar_temporary","&cYou have jailed for a period {duration} for {reason}").replace("{duration}", durationStr).replace("{reason}", banInfo.getReason()));
         }
     }
 

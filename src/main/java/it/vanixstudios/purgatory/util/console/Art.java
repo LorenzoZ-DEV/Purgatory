@@ -17,7 +17,7 @@ public class Art {
                 &c╚═╝░░░░░░╚═════╝░╚═╝░░╚═╝░╚═════╝░╚═╝░░╚═╝░░░╚═╝░░░░╚════╝░╚═╝░░╚═╝░░░╚═╝░░░
                 
                 &rThe &cPurgatory&r is a &cVanixStudios&r project.
-                &aConnected to the &eProxy&r.
+                &aConnected to the &eProxy &7(BungeeCord&7)&r.
                 
                 """;
 
@@ -36,7 +36,7 @@ public class Art {
                 &c╚═╝░░░░░░╚═════╝░╚═╝░░╚═╝░╚═════╝░╚═╝░░╚═╝░░░╚═╝░░░░╚════╝░╚═╝░░╚═╝░░░╚═╝░░░
                 
                 &rThe &cPurgatory&r is a &cVanixStudios&r project.
-                &cDisconnect to the &eProxy&r.
+                &cDisconnect to the &eProxy &7(BungeeCord)&r.
                 &cServer is stopping...
                 """;
 
