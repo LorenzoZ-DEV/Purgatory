@@ -212,11 +212,15 @@ public final class Purgatory extends Plugin {
         Logger.info("&cShutting down plugin...");
         Art.asciiArtStop();
 
-        if (profileManager != null) profileManager.close();
+        try{
+            if (profileManager != null) profileManager.close();
 
-        if (mongoManager != null) {
-            mongoManager.close();
-            Logger.database("&cMongoDB connection closed.");
+            if (mongoManager != null) {
+                mongoManager.close();
+                Logger.database("&cMongoDB connection closed.");
+            }
+        } catch (Exception e){
+            Logger.error("Error shutting down plugin: " + e.getMessage());
         }
 
         banManager = null;
