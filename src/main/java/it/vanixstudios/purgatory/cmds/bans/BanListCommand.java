@@ -1,6 +1,6 @@
 package it.vanixstudios.purgatory.cmds.bans;
 
-import it.vanixstudios.purgatory.manager.BanManager;
+import it.vanixstudios.purgatory.manager.bans.BanManager;
 import it.vanixstudios.purgatory.util.strings.C;
 import it.vanixstudios.purgatory.util.duration.TimeUtil;
 import revxrsal.commands.annotation.Command;

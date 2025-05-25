@@ -8,6 +8,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import revxrsal.commands.annotation.Command;
 import revxrsal.commands.annotation.Description;
+import revxrsal.commands.annotation.Optional;
 import revxrsal.commands.annotation.Usage;
 import revxrsal.commands.bungee.annotation.CommandPermission;
 
@@ -23,7 +24,7 @@ public class UnblacklistCommand {
     @Usage("unblacklist <player> [-p|-s]")
     @CommandPermission("purgatory.unblacklist")
     @Description("Remove a player from the blacklist")
-    public void unblacklist(CommandSender sender, String targetName, String... flags) {
+    public void unblacklist(CommandSender sender, String targetName, @Optional String flags) {
         if (targetName == null || targetName.isEmpty()) {
             sender.sendMessage(C.translate("&cUsage: /unblacklist <player>"));
             return;
@@ -38,14 +39,15 @@ public class UnblacklistCommand {
 
         boolean silent = true; // default silenzioso
 
-        for (String flag : flags) {
-            if (flag.equalsIgnoreCase("-p")) silent = false;
+        // Gestione flag come nel TempbanCommand
+        if (flags != null && flags.contains("-p")) {
+            silent = false;
         }
 
         blacklistCollection.deleteOne(Filters.eq("name", targetName));
         sender.sendMessage(C.translate(Purgatory.getConfigManager().getMessages().getString("blacklist.unblacklist_sender_notification","&aYou have unblacklisted &f{target}").replace("{target}", targetName)));
 
-        String message = C.translate(Purgatory.getConfigManager().getMessages().getString("unblacklist_notification","\"&7{target} &ahas been unblackliisted by &7{issuer}").replace("{target}", targetName).replace("{issuer}", sender.getName()));
+        String message = C.translate(Purgatory.getConfigManager().getMessages().getString("unblacklist_notification","&7{target} &ahas been unblacklisted by &7{issuer}").replace("{target}", targetName).replace("{issuer}", sender.getName()));
 
         if (silent) {
             ProxyServer.getInstance().getPlayers().stream()

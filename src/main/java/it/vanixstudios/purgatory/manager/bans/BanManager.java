@@ -1,4 +1,4 @@
-package it.vanixstudios.purgatory.manager;
+package it.vanixstudios.purgatory.manager.bans;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;

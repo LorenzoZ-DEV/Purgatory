@@ -3,13 +3,22 @@ plugins{
     id 'java'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
     id("org.gretty") version "4.1.6"
+}
 
+// Random build number generation
+def generateRandomHash() {
+    def chars = '0123456789abcdef'
+    def random = new Random()
+    return (1..7).collect { chars[random.nextInt(chars.length())] }.join('')
+}
 
+def generateBuildNumber() {
+    return new Random().nextInt(999) + 1
 }
 
 // Project information
 group = 'it.vanixstudios'
-version = '1.1.2'
+version = "1.1.2-${generateRandomHash()}_${generateBuildNumber()}"
 
 // Constants
 final int TARGET_JAVA_VERSION = 15
@@ -41,7 +50,6 @@ dependencies {
     testCompileOnly("org.projectlombok:lombok:1.18.38")
     testAnnotationProcessor("org.projectlombok:lombok:1.18.38")
     implementation 'org.gretty:gretty:4.1.6'
-
 }
 
 // Java configuration with toolchain setup

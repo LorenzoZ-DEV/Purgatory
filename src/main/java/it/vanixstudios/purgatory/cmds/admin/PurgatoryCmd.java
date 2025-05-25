@@ -18,7 +18,7 @@ public class PurgatoryCmd
 
                 """
                 &7&m--------------------------------
-                &7This server is using &cPurgatory 
+                &7This server is using &cPurgatory
                 &7Developed with ❤️ for &3X-Network
                 &r
                 &7Author: &cLorenz

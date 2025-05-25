@@ -19,24 +19,16 @@ public class BlacklistCommand {
     @Description("Blacklists a player permanently from the network.")
     @CommandPermission("purgatory.blacklist")
     public void execute(BungeeCommandActor actor,
-                        @Named("player") ProxiedPlayer target,
-                        @Named("reason") String... reason) {
+                        ProxiedPlayer target,
+                        @Optional String reason) { // Stesso pattern del TempbanCommand
 
-        if (reason.length == 0) {
+        if (reason == null || reason.trim().isEmpty()) {
             actor.reply(C.translate("&cYou must specify a reason for the blacklist."));
             return;
         }
 
-        StringBuilder fixedReason = new StringBuilder();
-        for (String str : reason) {
-            if (fixedReason.length() > 0) {
-                fixedReason.append(" ");
-            }
-            fixedReason.append(str);
-        }
-
-        boolean silent = fixedReason.toString().contains("-s");
-        String cleanReason = fixedReason.toString().replace("-s", "").trim();
+        boolean silent = reason.contains("-s");
+        String cleanReason = reason.replace("-s", "").trim();
 
         if (cleanReason.isEmpty()) {
             actor.reply(C.translate("&cYou must specify a reason for the blacklist."));

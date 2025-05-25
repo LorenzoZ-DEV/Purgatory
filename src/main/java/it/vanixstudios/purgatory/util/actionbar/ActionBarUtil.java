@@ -1,8 +1,8 @@
 package it.vanixstudios.purgatory.util.actionbar;
 
 import it.vanixstudios.purgatory.Purgatory;
-import it.vanixstudios.purgatory.manager.BanInfo;
-import it.vanixstudios.purgatory.manager.BanManager;
+import it.vanixstudios.purgatory.manager.bans.BanInfo;
+import it.vanixstudios.purgatory.manager.bans.BanManager;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.ChatMessageType;

@@ -1,4 +1,4 @@
-package it.vanixstudios.purgatory.manager;
+package it.vanixstudios.purgatory.manager.bans;
 
 public class BanInfo {
     private final String reason;

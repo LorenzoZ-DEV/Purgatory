@@ -1,5 +1,5 @@
 name: Purgatory
-version: '1.1.2'
+version: '${version}'
 main: it.vanixstudios.purgatory.Purgatory
 author: Lorenz
 contributors: X-Development

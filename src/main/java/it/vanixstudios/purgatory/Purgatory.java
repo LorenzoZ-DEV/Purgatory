@@ -12,18 +12,18 @@ import it.vanixstudios.purgatory.cmds.blacklist.BlacklistCommand;
 import it.vanixstudios.purgatory.cmds.blacklist.BlacklistInfoCommand;
 import it.vanixstudios.purgatory.cmds.blacklist.UnblacklistCommand;
 import it.vanixstudios.purgatory.cmds.kick.KickCommand;
+import it.vanixstudios.purgatory.listeners.bans.BlacklistListener;
 import it.vanixstudios.purgatory.listeners.bans.CommandBlacklistListener;
 import it.vanixstudios.purgatory.listeners.bans.PlayerLoginListener;
 import it.vanixstudios.purgatory.listeners.bans.ServerConnectListener;
 import it.vanixstudios.purgatory.listeners.evasion.BanEvadeListener;
 import it.vanixstudios.purgatory.listeners.mute.ChatListener;
-import it.vanixstudios.purgatory.manager.BanManager;
+import it.vanixstudios.purgatory.manager.bans.BanManager;
 import it.vanixstudios.purgatory.manager.config.ConfigManager;
 import it.vanixstudios.purgatory.manager.mute.MuteManager;
 import it.vanixstudios.purgatory.model.ProfileManager;
 import it.vanixstudios.purgatory.storage.MongoManager;
 import it.vanixstudios.purgatory.tasks.BanActionBarTask;
-import it.vanixstudios.purgatory.util.checker.UpdateChecker;
 import it.vanixstudios.purgatory.util.console.Art;
 import it.vanixstudios.purgatory.util.console.Logger;
 import lombok.Getter;
@@ -87,7 +87,6 @@ public final class Purgatory extends Plugin {
             ProxyServer.getInstance().stop();
             return;
         }
-        UpdateChecker.checkForUpdates();
         Logger.info("&aPlugin started successfully!");
         Art.asciiArt();
         ProxyServer.getInstance().getScheduler().schedule(
@@ -124,7 +123,8 @@ public final class Purgatory extends Plugin {
                 new ServerConnectListener(),
                 new CommandBlacklistListener(banManager),
                 new BanEvadeListener(),
-                new ChatListener(muteManager)
+                new ChatListener(muteManager),
+                new BlacklistListener ()
         ).forEach(listener -> getProxy().getPluginManager().registerListener(this, listener));
     }
 
@@ -198,7 +198,7 @@ public final class Purgatory extends Plugin {
 
         if (blacklistCollection != null) {
             lamp.register(
-                    new BlacklistCommand(),
+                    new BlacklistCommand (),
                     new BlacklistInfoCommand(),
                     new UnblacklistCommand(blacklistCollection)
             );

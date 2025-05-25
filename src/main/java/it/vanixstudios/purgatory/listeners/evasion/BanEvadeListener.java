@@ -2,7 +2,7 @@ package it.vanixstudios.purgatory.listeners.evasion;
 
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
-import it.vanixstudios.purgatory.manager.BanManager;
+import it.vanixstudios.purgatory.manager.bans.BanManager;
 import it.vanixstudios.purgatory.Purgatory;
 import it.vanixstudios.purgatory.model.Profile;
 import it.vanixstudios.purgatory.util.strings.C;
