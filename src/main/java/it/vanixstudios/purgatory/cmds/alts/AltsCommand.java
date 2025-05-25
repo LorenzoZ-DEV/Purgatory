@@ -2,6 +2,7 @@ package it.vanixstudios.purgatory.cmds.alts;
 
 import it.vanixstudios.purgatory.Purgatory;
 import it.vanixstudios.purgatory.model.Profile;
+import it.vanixstudios.purgatory.util.console.Logger;
 import it.vanixstudios.purgatory.util.strings.C;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -22,8 +23,22 @@ public class AltsCommand {
         ProxiedPlayer targetPlayer = ProxyServer.getInstance().getPlayer(playerName);
 
         if (targetPlayer == null) {
-            actor.reply("§cPlayer not found or offline.");
-            return;
+            try {
+                UUID offlineUUID = Purgatory.getInstance ( ).getBanManager ( ).getOrCreateUUID ( playerName );
+                Profile offlineProfile = Purgatory.getInstance ( ).getProfileManager ( ).getProfile ( offlineUUID );
+
+                if (offlineProfile == null) {
+                    actor.reply ( C.translate ( Purgatory.getConfigManager ().getMessages ().getString ( "alts.no_alts_found", "&aNo alternate accounts found for &c{target}" ).replace ( "{target}", playerName ) ) );
+                    return;
+                }
+
+                targetPlayer = ProxyServer.getInstance ( ).getPlayer ( offlineUUID );
+                Profile profile = offlineProfile;
+            } catch (Exception e) {
+                actor.reply ( C.translate ( "&cAn error occurred while getting player data." ) );
+                Logger.error ( "Error while getting player data: " + e.getMessage ( ) );
+                return;
+            }
         }
 
         Profile profile = Purgatory.getInstance().getProfileManager().getProfile(targetPlayer.getUniqueId());

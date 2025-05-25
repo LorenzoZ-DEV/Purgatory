@@ -22,27 +22,42 @@ public class BlacklistCommand {
                         @Named("player") ProxiedPlayer target,
                         @Named("reason") String... reason) {
 
+        if (reason.length == 0) {
+            actor.reply(C.translate("&cYou must specify a reason for the blacklist."));
+            return;
+        }
+
         StringBuilder fixedReason = new StringBuilder();
         for (String str : reason) {
-            fixedReason.append(" ").append(str);
+            if (fixedReason.length() > 0) {
+                fixedReason.append(" ");
+            }
+            fixedReason.append(str);
         }
 
         boolean silent = fixedReason.toString().contains("-s");
+        String cleanReason = fixedReason.toString().replace("-s", "").trim();
+
+        if (cleanReason.isEmpty()) {
+            actor.reply(C.translate("&cYou must specify a reason for the blacklist."));
+            return;
+        }
+
         Document doc = new Document("uuid", target != null ? target.getUniqueId().toString() : "unknown")
                 .append("name", target.getName())
-                .append("reason", fixedReason.toString())
+                .append("reason", cleanReason)
                 .append("timestamp", new Date());
 
         Purgatory.getInstance().getMongoManager().getDatabase()
                 .getCollection("blacklist")
                 .insertOne(doc);
 
-        Logger.info("&cBlacklisted player " + target.getName() + " for: " + fixedReason);
+        Logger.info("&cBlacklisted player " + target.getName() + " for: " + cleanReason);
         actor.reply(C.translate(Purgatory.getConfigManager().getMessages().getString(
                         "blacklist.blacklist_sender_notification",
                         "&aYou have blacklisted &c&l{target} &afor &c&l{reason} ")
                 .replace("{target}", target.getName())
-                .replace("{reason}", fixedReason.toString())));
+                .replace("{reason}", cleanReason)));
 
         String message = Purgatory.getConfigManager().getMessages().getString(
                         "blacklist.blacklist_notification",
@@ -60,7 +75,7 @@ public class BlacklistCommand {
             String kickMessage = C.translate(Purgatory.getConfigManager().getMessages().getString(
                             "blacklist.blacklist_disconnect",
                             "&cYou have been blacklisted from the server. \n Reason: &e{reason}")
-                    .replace("{reason}", fixedReason.toString()));
+                    .replace("{reason}", cleanReason));
             target.disconnect(kickMessage);
         }
     }

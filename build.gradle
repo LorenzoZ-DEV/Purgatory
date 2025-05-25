@@ -2,6 +2,9 @@
 plugins{
     id 'java'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id("org.gretty") version "4.1.6"
+
+
 }
 
 // Project information
@@ -37,6 +40,7 @@ dependencies {
 
     testCompileOnly("org.projectlombok:lombok:1.18.38")
     testAnnotationProcessor("org.projectlombok:lombok:1.18.38")
+    implementation 'org.gretty:gretty:4.1.6'
 
 }
 

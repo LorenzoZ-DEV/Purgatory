@@ -32,10 +32,11 @@ public class KickCommand {
         }
 
         boolean silent = true; // default silenzioso
-
-        for (String flag : flags) {
-            if (flag.equalsIgnoreCase("-p")) {
-                silent = false;
+        if (flags != null) {
+            for (String flag : flags) {
+                if (flag.equalsIgnoreCase ( "-p" )) {
+                    silent = false;
+                }
             }
         }
 
