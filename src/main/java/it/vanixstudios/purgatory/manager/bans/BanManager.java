@@ -63,10 +63,25 @@ public class BanManager {
         return until != null && until.after(new Date());
     }
 
+    public boolean isIpBanned(String ip) {
+        Document doc = bans.find(eq("ip", ip))
+                .sort(descending("bannedAt"))
+                .first();
+        return doc != null;
+    }
+
     public void unban(UUID uuid) {
         bans.deleteMany(eq("uuid", uuid.toString()));
     }
 
+    public void ipban(String ip, String reason) {
+        Document doc = new Document("ip", ip)
+                .append("permanent", true)
+                .append("until", null)
+                .append("bannedAt", new Date())
+                .append("reason", reason);
+        bans.insertOne(doc);
+    }
     public void sendToJail(ProxiedPlayer player) {
         if (player != null && player.isConnected()) {
             player.connect(Purgatory.getInstance().getProxy().getServerInfo("Jail"));

@@ -176,6 +176,7 @@ public final class Purgatory extends Plugin {
                     new UnbanCommand(banManager),
                     new AltsCommand(),
                     new KickCommand(),
+                    new IpBanCmd ( banManager ),
                     new PurgatoryCmd()
             );
         } else {

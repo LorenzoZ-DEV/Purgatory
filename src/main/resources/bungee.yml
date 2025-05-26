@@ -54,5 +54,6 @@ commands:
     description: "Unmute player"
   purgatory:
     description: "Purgatory info plugin"
-
+  ipban:
+    description: "IP ban player"
 
