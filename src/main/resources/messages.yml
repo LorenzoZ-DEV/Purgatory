@@ -31,8 +31,6 @@
 # {server} - The name of the server being joined.
 ban:
   already_banned: "&e{target} &cis already banned."
-  ipban_sender_notification: "&aYou permanently IP banned &f{target} &afor period FOREVER for reason: {reason}"
-  ipban_notification: "&7{target} &ahas been IP-banned by &7{issuer}. &aReason: &e{reason}"
   # Notification to the sender when a player is permanently banned.
   ban_sender_notification: "&aYou permanently banned &f{target} &afor period FOREVER for reason: {reason}"
   # Notification to the sender when a player is temporarily banned.
@@ -67,13 +65,6 @@ ban:
     &c&lfrom the &c&lX-Network&c.
     &c&lYou have been banned for {duration}
     
-    &4Purchase an unban @ store.x-network.org
-    
-    &7Reason: {reason}
-
-  ipban_disconnect: |-
-    &c&lYour account has been suspended
-    &c&lfrom the &c&lX-Network&c.    
     &4Purchase an unban @ store.x-network.org
     
     &7Reason: {reason}

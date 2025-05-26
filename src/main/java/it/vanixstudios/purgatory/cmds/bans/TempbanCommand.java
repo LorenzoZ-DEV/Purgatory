@@ -22,57 +22,58 @@ public class TempbanCommand {
         this.banManager = banManager;
     }
 
-    @Command({"tempban","tempjail","tb"})
+    @Command({"tempban", "tempjail", "tb"})
     @CommandPermission("purgatory.ban")
     @Usage("tempban <player> <duration> <reason> [-p|-s]")
-    public void executeTempban(BungeeCommandActor actor, ProxiedPlayer playerName, String durationArg, @Optional String reason) {
-        UUID uuid = banManager.getOrCreateUUID(playerName.getName());
+    public void executeTempban(BungeeCommandActor actor, String targetName, String durationArg, @Optional String reason) {
+        ProxiedPlayer target = ProxyServer.getInstance ( ).getPlayer ( targetName );
+        UUID uuid = banManager.getOrCreateUUID ( targetName );
+        String ip = target != null ? target.getSocketAddress ( ).toString ( ).split ( ":" )[0].replace ( "/", "" ) : "offline";
 
-        if (banManager.isBanned(uuid)) {
-            actor.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("ban.already_banned","&e{target} &calready banned").replace("{target}", playerName.getName())));
+        if (banManager.isBanned ( uuid )) {
+            actor.reply ( C.translate ( Purgatory.getConfigManager ( ).getMessages ( ).getString ( "ban.already_banned", "&e{target} &calready banned" ).replace ( "{target}", targetName ) ) );
             return;
         }
 
         long duration;
         try {
-            duration = TimeUtil.parseTime(durationArg);
+            duration = TimeUtil.parseTime ( durationArg );
         } catch (IllegalArgumentException e) {
-            actor.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("general.invalid_duration","&cInvalid duration. Use formats like 10m, 1h, 2d.")));
+            actor.reply ( C.translate ( Purgatory.getConfigManager ( ).getMessages ( ).getString ( "general.invalid_duration", "&cInvalid duration. Use formats like 10m, 1h, 2d." ) ) );
             return;
         }
 
         if (reason == null) reason = "";
 
         boolean silent = true;
-        if (reason.contains("-p")) {
+        if (reason.contains ( "-p" )) {
             silent = false;
         }
 
-        String finalReason = reason.replace("-p", "").replace("-s", "").trim();
-        if (finalReason.isEmpty()) finalReason = "No specific reason provided.";
+        String finalReason = reason.replace ( "-p", "" ).replace ( "-s", "" ).trim ( );
+        if (finalReason.isEmpty ( )) finalReason = "No specific reason provided.";
 
-        banManager.tempBan(uuid, playerName.getName(), duration, finalReason);
+        banManager.tempBan ( uuid, targetName, duration, finalReason, ip );
 
-        ProxiedPlayer target = ProxyServer.getInstance().getPlayer(playerName.getName());
-        if (target != null && target.isConnected()) {
-            banManager.sendToJail(target);
-            target.disconnect(C.translate(Purgatory.getConfigManager().getMessages().getString("ban.tempban_disconnect").replace("{reason}", finalReason).replace("{duration}", durationArg)));
+        if (target != null) {
+            banManager.sendToJail ( target );
+            target.disconnect ( C.translate ( Purgatory.getConfigManager ( ).getMessages ( ).getString ( "ban.tempban_disconnect" ).replace ( "{reason}", finalReason ).replace ( "{duration}", durationArg ) ) );
         }
 
-        actor.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("ban.tempban_sender_notification").replace("{target}", playerName.getName()).replace("{duration}", durationArg).replace("{reason}", finalReason)));
+        actor.reply ( C.translate ( Purgatory.getConfigManager ( ).getMessages ( ).getString ( "ban.tempban_sender_notification" ).replace ( "{target}", targetName ).replace ( "{duration}", durationArg ).replace ( "{reason}", finalReason ) ) );
 
-        String notification = String.format(Purgatory.getConfigManager().getMessages().getString("ban.tempban_notification","&7{target} &ahas been temporarily banned by &7{issuer}. &afor {duration} &aReason: &e{reason}").replace("{target}", playerName.getName()).replace("{issuer}", actor.name()).replace("{duration}", durationArg).replace("{reason}", finalReason));
+        String notification = String.format ( Purgatory.getConfigManager ( ).getMessages ( ).getString ( "ban.tempban_notification", "&7{target} &ahas been temporarily banned by &7{issuer}. &afor {duration} &aReason: &e{reason}" ).replace ( "{target}", targetName ).replace ( "{issuer}", actor.name ( ) ).replace ( "{duration}", durationArg ).replace ( "{reason}", finalReason ) );
 
         if (silent) {
-            notifyStaff("&7[Silent] " + notification);
+            notifyStaff ( "&7[Silent] " + notification );
         } else {
-            ProxyServer.getInstance().broadcast(C.translate("&c[!] " + notification));
+            ProxyServer.getInstance ( ).broadcast ( C.translate ( "&c[!] " + notification ) );
         }
     }
 
     private void notifyStaff(String message) {
-        ProxyServer.getInstance().getPlayers().stream()
-                .filter(p -> p.hasPermission("purgatory.notifications"))
-                .forEach(p -> p.sendMessage(C.translate(message)));
+        ProxyServer.getInstance ( ).getPlayers ( ).stream ( )
+                .filter ( p -> p.hasPermission ( "purgatory.notifications" ) )
+                .forEach ( p -> p.sendMessage ( C.translate ( message ) ) );
     }
 }

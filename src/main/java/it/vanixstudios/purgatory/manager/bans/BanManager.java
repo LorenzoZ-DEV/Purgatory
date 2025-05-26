@@ -29,23 +29,25 @@ public class BanManager {
         this.bans = bans;
     }
 
-    public void ban(UUID uuid, String name, String reason) {
+    public void ban(UUID uuid, String name, String reason, String ip) {
         Document doc = new Document("uuid", uuid.toString())
                 .append("name", name)
                 .append("permanent", true)
                 .append("until", null)
                 .append("bannedAt", new Date())
+                .append ( "ip" , ip )
                 .append("reason", reason);
         bans.insertOne(doc);
     }
 
-    public void tempBan(UUID uuid, String name, long durationMillis, String reason) {
+    public void tempBan(UUID uuid, String name, long durationMillis, String reason, String ip ) {
         Date until = new Date(System.currentTimeMillis() + durationMillis);
         Document doc = new Document("uuid", uuid.toString())
                 .append("name", name)
                 .append("permanent", false)
                 .append("until", until)
                 .append("bannedAt", new Date())
+                .append ( "ip", ip )
                 .append("reason", reason);
         bans.insertOne(doc);
     }
@@ -63,25 +65,11 @@ public class BanManager {
         return until != null && until.after(new Date());
     }
 
-    public boolean isIpBanned(String ip) {
-        Document doc = bans.find(eq("ip", ip))
-                .sort(descending("bannedAt"))
-                .first();
-        return doc != null;
-    }
 
     public void unban(UUID uuid) {
         bans.deleteMany(eq("uuid", uuid.toString()));
     }
 
-    public void ipban(String ip, String reason) {
-        Document doc = new Document("ip", ip)
-                .append("permanent", true)
-                .append("until", null)
-                .append("bannedAt", new Date())
-                .append("reason", reason);
-        bans.insertOne(doc);
-    }
     public void sendToJail(ProxiedPlayer player) {
         if (player != null && player.isConnected()) {
             player.connect(Purgatory.getInstance().getProxy().getServerInfo("Jail"));

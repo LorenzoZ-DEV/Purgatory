@@ -11,6 +11,7 @@ import revxrsal.commands.annotation.Usage;
 import revxrsal.commands.bungee.actor.BungeeCommandActor;
 import revxrsal.commands.bungee.annotation.CommandPermission;
 
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 public class BanCommand {
@@ -21,55 +22,55 @@ public class BanCommand {
         this.banManager = banManager;
     }
 
-    @Command({"ban","jail","b"})
+    @Command({"ban", "jail", "b"})
     @CommandPermission("purgatory.ban")
     @Usage("ban <player> [reason] [-p|-s]")
     public void ban(BungeeCommandActor actor,
-                    ProxiedPlayer target,
+                    String playerName,
                     @Optional String reason) {
 
-        if (target == null) {
-            actor.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("general.player_not_found","&cPlayer not found")));
-            return;
-        }
+        ProxiedPlayer target = ProxyServer.getInstance ( ).getPlayer ( playerName );
+        UUID uuid = target != null ? target.getUniqueId ( ) :
+                UUID.nameUUIDFromBytes ( ("OfflinePlayer:" + playerName).getBytes ( StandardCharsets.UTF_8 ) );
 
-        UUID uuid = target.getUniqueId();
-        String playerName = target.getName();
-
-        if (banManager.isBanned(uuid)) {
-            actor.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("ban.already_banned","&e{target} &calready banned").replace("{target}", playerName)));
+        if (banManager.isBanned ( uuid )) {
+            actor.reply ( C.translate ( Purgatory.getConfigManager ( ).getMessages ( ).getString ( "ban.already_banned", "&e{target} &calready banned" ).replace ( "{target}", playerName ) ) );
             return;
         }
 
         if (reason == null) reason = "";
 
         boolean silent = true;
-        if (reason.contains("-p")) {
+        if (reason.contains ( "-p" )) {
             silent = false;
         }
 
-        String finalReason = reason.replace("-p", "").replace("-s", "").trim();
-        if (finalReason.isEmpty()) finalReason = "No reason specified.";
+        String finalReason = reason.replace ( "-p", "" ).replace ( "-s", "" ).trim ( );
+        if (finalReason.isEmpty ( )) finalReason = "No reason specified.";
 
-        banManager.ban(uuid, playerName, finalReason);
-        banManager.sendToJail(target);
+        String ip = target != null ? target.getSocketAddress ( ).toString ( ).split ( ":" )[0].replace ( "/", "" ) : "";
 
-        target.disconnect(C.translate(Purgatory.getConfigManager().getMessages().getString("ban.ban_disconnect").replace("{reason}", finalReason)));
+        banManager.ban ( uuid, playerName, finalReason, ip );
 
-        actor.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("ban.ban_sender_notification").replace("{target}", playerName).replace("{reason}", finalReason)));
+        if (target != null) {
+            banManager.sendToJail ( target );
+            target.disconnect ( C.translate ( Purgatory.getConfigManager ( ).getMessages ( ).getString ( "ban.ban_disconnect" ).replace ( "{reason}", finalReason ) ) );
+        }
 
-        String notification = String.format(Purgatory.getConfigManager().getMessages().getString("ban.ban_notification").replace("{target}", playerName).replace("{issuer}", actor.name()).replace("{reason}", finalReason));
+        actor.reply ( C.translate ( Purgatory.getConfigManager ( ).getMessages ( ).getString ( "ban.ban_sender_notification" ).replace ( "{target}", playerName ).replace ( "{reason}", finalReason ) ) );
+
+        String notification = String.format ( Purgatory.getConfigManager ( ).getMessages ( ).getString ( "ban.ban_notification" ).replace ( "{target}", playerName ).replace ( "{issuer}", actor.name ( ) ).replace ( "{reason}", finalReason ) );
 
         if (silent) {
-            notifyStaff("&7[Silent] " + notification);
+            notifyStaff ( "&7[Silent] " + notification );
         } else {
-            ProxyServer.getInstance().broadcast(C.translate("&c[!] " + notification));
+            ProxyServer.getInstance ( ).broadcast ( C.translate ( "&c[!] " + notification ) );
         }
     }
 
     private void notifyStaff(String message) {
-        ProxyServer.getInstance().getPlayers().stream()
-                .filter(p -> p.hasPermission("purgatory.notifications"))
-                .forEach(p -> p.sendMessage(C.translate(message)));
+        ProxyServer.getInstance ( ).getPlayers ( ).stream ( )
+                .filter ( p -> p.hasPermission ( "purgatory.notifications" ) )
+                .forEach ( p -> p.sendMessage ( C.translate ( message ) ) );
     }
 }
