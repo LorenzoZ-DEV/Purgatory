@@ -29,28 +29,40 @@ public class BanManager {
         this.bans = bans;
     }
 
-    public void ban(UUID uuid, String name, String reason, String ip) {
+    public void ban(UUID uuid, String name, String reason, String ip, String bannedBy) {
         Document doc = new Document("uuid", uuid.toString())
                 .append("name", name)
                 .append("permanent", true)
                 .append("until", null)
                 .append("bannedAt", new Date())
-                .append ( "ip" , ip )
+                .append("ip", ip)
+                .append("bannedBy", bannedBy)
                 .append("reason", reason);
         bans.insertOne(doc);
     }
 
-    public void tempBan(UUID uuid, String name, long durationMillis, String reason, String ip ) {
+// Mantieni i metodi originali per compatibilità, ma con "Console" come default
+public void ban(UUID uuid, String name, String reason, String ip) {
+    ban(uuid, name, reason, ip, "Console");
+}
+
+    public void tempBan(UUID uuid, String name, long durationMillis, String reason, String ip, String bannedBy) {
         Date until = new Date(System.currentTimeMillis() + durationMillis);
         Document doc = new Document("uuid", uuid.toString())
                 .append("name", name)
                 .append("permanent", false)
                 .append("until", until)
                 .append("bannedAt", new Date())
-                .append ( "ip", ip )
+                .append("ip", ip)
+                .append("bannedBy", bannedBy)
                 .append("reason", reason);
         bans.insertOne(doc);
     }
+
+// Mantieni i metodi originali per compatibilità, ma con "Console" come default
+public void tempBan(UUID uuid, String name, long durationMillis, String reason, String ip) {
+    tempBan(uuid, name, durationMillis, reason, ip, "Console");
+}
 
     public boolean isBanned(UUID uuid) {
         Document doc = bans.find(eq("uuid", uuid.toString()))
@@ -166,21 +178,14 @@ public class BanManager {
         return UUID.nameUUIDFromBytes(("OfflinePlayer:" + playerName).getBytes(StandardCharsets.UTF_8));
     }
 
-    public BanInfo getBannedBy(UUID uuid) {
-        if (uuid == null) return null;
 
+
+    public String getBannedBy(UUID uuid) {
         Document doc = bans.find(eq("uuid", uuid.toString()))
                 .sort(descending("bannedAt"))
                 .first();
         if (doc == null) return null;
-
-        String reason = doc.getString("reason");
-        Date bannedAtDate = doc.getDate("bannedAt");
-        long bannedAt = bannedAtDate != null ? bannedAtDate.getTime() : 0;
-        boolean permanent = doc.getBoolean("permanent", false);
-        long duration = permanent ? 0 : (doc.getDate("until") != null ? doc.getDate("until").getTime() - bannedAt : 0);
-
-        return new BanInfo(reason, bannedAt, duration);
+        return doc.getString("bannedBy");
     }
 
 

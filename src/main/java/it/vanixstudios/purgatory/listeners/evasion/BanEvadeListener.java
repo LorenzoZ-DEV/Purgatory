@@ -93,8 +93,7 @@ public class BanEvadeListener implements Listener {
             String bannedName = evadingBan.getString("name");
             String reason = evadingBan.getString("reason");
 
-            // BANNA AUTOMATICAMENTE L'ACCOUNT CHE STA EVADENDO
-            banManager.ban(player.getUniqueId(), player.getName(), "Ban Evading (Alt of " + bannedName + ")", playerIP);
+            banManager.ban(player.getUniqueId(), player.getName(), "Ban Evading (Alt of " + bannedName + ")", playerIP, "CONSOLE");
             banManager.sendToJail ( player );
 
             Collection<ProxiedPlayer> players = ProxyServer.getInstance().getPlayers();

@@ -172,7 +172,7 @@ public final class Purgatory extends Plugin {
                     new TempbanCommand(banManager),
                     new HistoryCommand(banManager),
                     new BanListCommand(),
-                    new CheckBanCommand(banManager),
+                    new CheckBanCommand(),
                     new UnbanCommand(banManager),
                     new AltsCommand(),
                     new KickCommand(),
