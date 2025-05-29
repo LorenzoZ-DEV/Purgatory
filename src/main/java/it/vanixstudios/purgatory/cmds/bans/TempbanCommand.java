@@ -7,6 +7,7 @@ import it.vanixstudios.purgatory.util.duration.TimeUtil;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import revxrsal.commands.annotation.Command;
+import revxrsal.commands.annotation.Description;
 import revxrsal.commands.annotation.Optional;
 import revxrsal.commands.annotation.Usage;
 import revxrsal.commands.bungee.actor.BungeeCommandActor;
@@ -23,6 +24,7 @@ public class TempbanCommand {
     }
 
     @Command({"tempban", "tempjail", "tb"})
+    @Description("Temporarily bans a player from the network.")
     @CommandPermission("purgatory.ban")
     @Usage("tempban <player> <duration> <reason> [-p|-s]")
     public void executeTempban(BungeeCommandActor actor, String targetName, String durationArg, @Optional String reason) {

@@ -21,6 +21,7 @@ public class UnMuteCommand {
 
     @Command("unmute")
     @Usage("unmute <player> [-p|-s]")
+    @Description("Unmute a player")
     @CommandPermission("purgatory.unmute")
     public void onUnmute(CommandActor actor,
                          @Named("player") @Suggest("player") String playerName,

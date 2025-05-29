@@ -7,6 +7,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.ProxyServer;
 import org.bson.Document;
 import revxrsal.commands.annotation.Command;
+import revxrsal.commands.annotation.Description;
 import revxrsal.commands.annotation.Optional;
 import revxrsal.commands.annotation.Usage;
 import revxrsal.commands.bungee.annotation.CommandPermission;
@@ -29,6 +30,7 @@ public class UnbanCommand {
     }
 
     @Command({"unban","unjail","unb"})
+    @Description("Unban a player")
     @Usage("unban <player> [-p|-s]")
     @CommandPermission("purgatory.ban")
     public void unban(BungeeCommandActor actor, String playerName, @Optional String... args) {

@@ -5,11 +5,11 @@ import it.vanixstudios.purgatory.manager.bans.BanManager;
 import it.vanixstudios.purgatory.util.strings.C;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import revxrsal.commands.annotation.Command;
-import revxrsal.commands.annotation.Optional;
-import revxrsal.commands.annotation.Usage;
+import org.checkerframework.framework.qual.DefaultFor;
+import revxrsal.commands.annotation.*;
 import revxrsal.commands.bungee.actor.BungeeCommandActor;
 import revxrsal.commands.bungee.annotation.CommandPermission;
+import revxrsal.commands.help.Help;
 
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
@@ -22,8 +22,10 @@ public class BanCommand {
         this.banManager = banManager;
     }
 
+
     @Command({"ban", "jail", "b"})
     @CommandPermission("purgatory.ban")
+    @Description ( "Ban a player" )
     @Usage("ban <player> [reason] [-p|-s]")
     public void ban(BungeeCommandActor actor,
                     String playerName,

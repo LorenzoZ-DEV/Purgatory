@@ -4,6 +4,7 @@ import it.vanixstudios.purgatory.manager.bans.BanManager;
 import it.vanixstudios.purgatory.util.strings.C;
 import it.vanixstudios.purgatory.util.duration.TimeUtil;
 import revxrsal.commands.annotation.Command;
+import revxrsal.commands.annotation.Description;
 import revxrsal.commands.bungee.annotation.CommandPermission;
 
 import org.bson.Document;
@@ -16,6 +17,7 @@ import java.util.List;
 public class BanListCommand {
 
     @Command("banlist")
+    @Description ( "Blacklist a player banning the UUIDS and IPS " )
     @CommandPermission("purgatory.staff")
     private void banlist(CommandActor sender) {
         BanManager banManager = BanManager.getInstance();

@@ -7,6 +7,10 @@ import it.vanixstudios.purgatory.Purgatory;
 import it.vanixstudios.purgatory.model.Profile;
 import it.vanixstudios.purgatory.util.strings.C;
 import it.vanixstudios.purgatory.util.console.Logger;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.hover.content.Text;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.event.PostLoginEvent;
@@ -84,25 +88,35 @@ public class BanEvadeListener implements Listener {
                     .sort(Sorts.descending("bannedAt"))
                     .first();
 
-            if (evadingBan == null) continue; // still protect against null
+            if (evadingBan == null) continue;
 
             String bannedName = evadingBan.getString("name");
             String reason = evadingBan.getString("reason");
+
+            // BANNA AUTOMATICAMENTE L'ACCOUNT CHE STA EVADENDO
+            banManager.ban(player.getUniqueId(), player.getName(), "Ban Evading (Alt of " + bannedName + ")", playerIP);
+            banManager.sendToJail ( player );
 
             Collection<ProxiedPlayer> players = ProxyServer.getInstance().getPlayers();
             for (ProxiedPlayer p : players) {
                 if (p.hasPermission("purgatory.staff")) {
                     String message = "";
-                    try{
-                        message = Purgatory.getConfigManager().getMessages().getString("ban.ban_evading_alert","&7(&e!&7) &7{ban_evador} &fjoined to &d{server} &fand must be &cBan-Evading with &7{old_nick}").replace("{ban_evador}", bannedName).replace("{server}", player.getServer().getInfo().getName().replace("{old_nick}", player.getName()));
-
+                    try {
+                        String serverName = player.getServer() != null ? player.getServer().getInfo().getName() : "connecting";
+                        message = C.translate("&7(&c!&7) &7" + player.getName() + " &fwas sended to &c&lJAIL &ffor evading ban of &7" + bannedName);
+                        TextComponent component = new TextComponent(message);
+                        p.sendMessage(component);
                     } catch (Exception e) {
-                        message = "&7(&e!&7) &7" + bannedName + " &fjoined to &d" + player.getServer().getInfo().getName().replace("{old_nick}", player.getName());
+                        message = C.translate("&7(&c!&7) &7" + player.getName() + " &fwas sended to &c&lJAIL &ffor evading ban of & &7" + bannedName);
+                        TextComponent component = new TextComponent(message);
+                        p.sendMessage(component);
                     }
-                    p.sendMessage(message);
                     Logger.debug(message);
                 }
             }
+        
+            // Esci dal loop dopo aver trovato il primo alt bannato
+            break;
         }
     }
 }

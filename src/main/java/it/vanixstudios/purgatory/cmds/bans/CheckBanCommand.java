@@ -6,6 +6,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.bson.Document;
 import revxrsal.commands.annotation.Command;
+import revxrsal.commands.annotation.Description;
 import revxrsal.commands.annotation.Optional;
 import revxrsal.commands.annotation.Usage;
 import revxrsal.commands.bungee.annotation.CommandPermission;
@@ -28,6 +29,7 @@ public class CheckBanCommand {
     }
 
     @Command({"checkban","checkjail"})
+    @Description ( "Check if the player is jailed" )
     @Usage("checkban <player>")
     @CommandPermission("purgatory.checkban")
     public void checkBan(BungeeCommandActor actor, String playerName) {

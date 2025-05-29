@@ -20,6 +20,7 @@ public class TempMuteCommand {
 
     @Command("tempmute")
     @Usage("tempmute <player> <duration> <reason> [-p|-s]")
+    @Description("Temporarily mutes a player for a specified duration with an optional reason.")
     @CommandPermission("purgatory.tempmute")
     public void onTempMute(CommandActor actor, String[] args) {
 

@@ -7,6 +7,7 @@ import it.vanixstudios.purgatory.util.duration.TimeUtil;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import revxrsal.commands.annotation.Command;
+import revxrsal.commands.annotation.Description;
 import revxrsal.commands.annotation.Named;
 import revxrsal.commands.annotation.Usage;
 import revxrsal.commands.bungee.annotation.CommandPermission;
@@ -24,6 +25,7 @@ public class CheckMuteCommand {
 
     @Command("checkmute")
     @CommandPermission("purgatory.staff")
+    @Description("Check if a player is muted")
     @Usage("checkmute <player>")
     public void onCheckMute(CommandActor actor, @Named("player") String playerName) {
         ProxiedPlayer target = ProxyServer.getInstance().getPlayer(playerName);
