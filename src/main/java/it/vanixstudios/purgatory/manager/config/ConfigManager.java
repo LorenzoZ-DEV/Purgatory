@@ -23,7 +23,6 @@ public class ConfigManager {
 
     public void loadMessages() {
         try {
-            // Changed versioning key from "config-version" to "config_version" to match your YAML
             messages = YamlDocument.create(
                     new File(Purgatory.getInstance().getDataDirectory().toFile(), "messages.yml"),
                     getClass().getResourceAsStream("/messages.yml"),
@@ -58,8 +57,7 @@ public class ConfigManager {
     }
 
     public static void load() {
-        // Removed redundant loading here to avoid circular loading
-        // The main class already calls both loadConfig and loadMessages
+
     }
 
     public void reload() throws IOException {

@@ -112,7 +112,9 @@ public final class Purgatory extends Plugin {
                 }
                 Logger.info("&aCreated storage.yml file.");
             } catch (IOException e) {
+                Logger.line();
                 Logger.error("Unable to create storage.yml: " + e.getMessage());
+                Logger.line();
             }
         }
     }
