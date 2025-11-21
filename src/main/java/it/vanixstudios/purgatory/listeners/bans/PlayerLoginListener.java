@@ -25,12 +25,12 @@ public class PlayerLoginListener implements Listener {
         ProxiedPlayer player = event.getPlayer();
 
         if (banManager != null && banManager.isBanned(player.getUniqueId())) {
-            ServerInfo jailServer = Purgatory.getConfigManager().getConfig().getString("JAILSYSTEM.server-jail","Jail").equalsIgnoreCase("") ? null : ProxyServer.getInstance().getServerInfo("Jail");
+            ServerInfo jailServer = Purgatory.getConfigManager().getConfig().getString("JAILSYSTEM.server-jail","purgatorio").equalsIgnoreCase("") ? null : ProxyServer.getInstance().getServerInfo("purgatorio");
             if (jailServer != null) {
-                Logger.debug("Redirecting banned player " + player.getName() + " to Jail server.");
+                Logger.debug("Redirecting banned player " + player.getName() + " to Purgatorio.");
                 event.setTarget(jailServer);
             } else {
-                Logger.warning("WARNING: Server 'Jail' non trovato nella configurazione!");
+                Logger.warning("WARNING: Server " + jailServer + " non trovato nella configurazione!");
             }
         }
     }
@@ -40,11 +40,11 @@ public class PlayerLoginListener implements Listener {
         ProxiedPlayer player = event.getPlayer();
 
         if (banManager.isBanned(player.getUniqueId())) {
-            ServerInfo jailServer = Purgatory.getConfigManager().getConfig().getString("JAILSYSTEM.server-jail","").equalsIgnoreCase("") ? null : ProxyServer.getInstance().getServerInfo("Jail");
+            ServerInfo jailServer = Purgatory.getConfigManager().getConfig().getString("JAILSYSTEM.server-jail","purgatorio").equalsIgnoreCase("") ? null : ProxyServer.getInstance().getServerInfo("Jail");
 
-            if (jailServer != null && !player.getServer().getInfo().getName().equalsIgnoreCase("Jail")) {
+            if (jailServer != null && !player.getServer().getInfo().getName().equalsIgnoreCase("purgatorio")) {
                 Logger.warning("Banned player " + player.getName() + " tried to switch to " +
-                        player.getServer().getInfo().getName() + ". Redirecting back to Jail.");
+                        player.getServer().getInfo().getName() + ". Redirecting back to Purgatorio.");
                 player.connect(jailServer);
             }
         }

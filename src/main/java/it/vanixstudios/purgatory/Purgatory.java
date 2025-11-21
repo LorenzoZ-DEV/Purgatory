@@ -12,6 +12,7 @@ import it.vanixstudios.purgatory.cmds.blacklist.BlacklistCommand;
 import it.vanixstudios.purgatory.cmds.blacklist.BlacklistInfoCommand;
 import it.vanixstudios.purgatory.cmds.blacklist.UnblacklistCommand;
 import it.vanixstudios.purgatory.cmds.kick.KickCommand;
+import it.vanixstudios.purgatory.listeners.PunishmentTabCompleteListener;
 import it.vanixstudios.purgatory.listeners.bans.BlacklistListener;
 import it.vanixstudios.purgatory.listeners.bans.CommandBlacklistListener;
 import it.vanixstudios.purgatory.listeners.bans.PlayerLoginListener;
@@ -26,6 +27,7 @@ import it.vanixstudios.purgatory.storage.MongoManager;
 import it.vanixstudios.purgatory.tasks.BanActionBarTask;
 import it.vanixstudios.purgatory.util.console.Art;
 import it.vanixstudios.purgatory.util.console.Logger;
+import it.vanixstudios.purgatory.util.players.PlayerTargets;
 import lombok.Getter;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -55,13 +57,37 @@ public final class Purgatory extends Plugin {
     @Getter
     private static final ConfigManager configManager = new ConfigManager();
 
-    @Getter
+//    public static ConfigManager getConfigManager() {
+//        return configManager;
+//    }
+//
+//    public static Purgatory getInstance() {
+//        return instance;
+//    }
+//
+//    public BanManager getBanManager() {
+//        return banManager;
+//    }
+//
+//    public MuteManager getMuteManager() {
+//        return muteManager;
+//    }
+//
+//    public MongoManager getMongoManager() {
+//        return mongoManager;
+//    }
+//
+//    public ProfileManager getProfileManager() {
+//        return profileManager;
+//    }
+
+    public Path getDataDirectory() {
+        return dataDirectory;
+    }
+
     private Path dataDirectory;
 
 
-    public static Purgatory getInstance() {
-        return Purgatory.instance;
-    }
 
     @Override
     public void onEnable() {
@@ -126,7 +152,8 @@ public final class Purgatory extends Plugin {
                 new CommandBlacklistListener(banManager),
                 new BanEvadeListener(),
                 new ChatListener(muteManager),
-                new BlacklistListener ()
+                new BlacklistListener (),
+                new PunishmentTabCompleteListener()
         ).forEach(listener -> getProxy().getPluginManager().registerListener(this, listener));
     }
 
@@ -168,9 +195,11 @@ public final class Purgatory extends Plugin {
         Logger.info("&aRegistering commands...");
         Lamp<BungeeCommandActor> lamp = BungeeLamp.builder(this).build();
 
+
         if (banManager != null) {
             lamp.register(
                     new BanCommand(banManager),
+                    new BanIpCommand(banManager),
                     new TempbanCommand(banManager),
                     new HistoryCommand(banManager),
                     new BanListCommand(),
@@ -233,3 +262,4 @@ public final class Purgatory extends Plugin {
         Logger.info("&cPlugin disabled.");
     }
 }
+

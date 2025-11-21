@@ -5,10 +5,7 @@ import it.vanixstudios.purgatory.util.strings.C;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.bson.Document;
-import revxrsal.commands.annotation.Command;
-import revxrsal.commands.annotation.Description;
-import revxrsal.commands.annotation.Optional;
-import revxrsal.commands.annotation.Usage;
+import revxrsal.commands.annotation.*;
 import revxrsal.commands.bungee.annotation.CommandPermission;
 import revxrsal.commands.bungee.actor.BungeeCommandActor;
 
@@ -72,12 +69,12 @@ public class HistoryCommand {
         }
     }
 
-    public List<String> historyTabComplete(BungeeCommandActor actor, @Optional String prefix) {
-        String lowerPrefix = prefix == null ? "" : prefix.toLowerCase();
-
-        return ProxyServer.getInstance().getPlayers().stream()
-                .map(ProxiedPlayer::getName)
-                .filter(name -> name.toLowerCase().startsWith(lowerPrefix))
-                .collect(Collectors.toList());
+    public java.util.List<String> historyTabComplete(BungeeCommandActor actor, @Optional String prefix) {
+        String lp = prefix == null ? "" : prefix.toLowerCase();
+        return net.md_5.bungee.api.ProxyServer.getInstance().getPlayers().stream()
+                .map(net.md_5.bungee.api.connection.ProxiedPlayer::getName)
+                .filter(n -> n.toLowerCase().startsWith(lp))
+                .sorted(String.CASE_INSENSITIVE_ORDER)
+                .collect(java.util.stream.Collectors.toList());
     }
 }

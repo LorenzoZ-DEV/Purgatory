@@ -23,9 +23,9 @@
 #-----------------------------------------------------------------------------------------
 JAILSYSTEM:
   # The server of the player when connect after the ban
-  server-jail: "Jail"
+  server-jail: "Purgatorio"
   # Rendirect lobby when the player is unbanned.
-  lobby-server: "Hub-01"
+  lobby-server: "hub-01"
 
 # Don't change the Version
 config_version: 1

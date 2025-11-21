@@ -4,11 +4,12 @@ import it.vanixstudios.purgatory.Purgatory;
 import it.vanixstudios.purgatory.manager.mute.MuteManager;
 import it.vanixstudios.purgatory.util.strings.C;
 import it.vanixstudios.purgatory.util.duration.TimeUtil;
+import it.vanixstudios.purgatory.util.players.PlayerTargets;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import revxrsal.commands.annotation.*;
 import revxrsal.commands.bungee.annotation.CommandPermission;
-import revxrsal.commands.command.CommandActor;
+import revxrsal.commands.bungee.actor.BungeeCommandActor;
 
 public class TempMuteCommand {
 
@@ -22,35 +23,13 @@ public class TempMuteCommand {
     @Usage("tempmute <player> <duration> <reason> [-p|-s]")
     @Description("Temporarily mutes a player for a specified duration with an optional reason.")
     @CommandPermission("purgatory.tempmute")
-    public void onTempMute(CommandActor actor, String[] args) {
+    public void onTempMute(BungeeCommandActor actor,
+                           String playerName,
+                           String durationStr,
+                           @Optional String reason,
+                           @Optional String... flags) {
 
-        if (args.length < 3) {
-            actor.reply(C.translate("&cUsage: /tempmute <player> <duration> <reason> [-p|-s]"));
-            return;
-        }
-
-        String playerName = args[0];
-        String durationStr = args[1];
-
-        // Ricostruisce la reason e cerca i flag
-        StringBuilder reasonBuilder = new StringBuilder();
-        boolean silent = true;
-
-        for (int i = 2; i < args.length; i++) {
-            if (args[i].equals("-p")) {
-                silent = false;
-            } else if (args[i].equals("-s")) {
-                silent = true;
-            } else {
-                if (reasonBuilder.length() > 0) {
-                    reasonBuilder.append(" ");
-                }
-                reasonBuilder.append(args[i]);
-            }
-        }
-
-        String cleanReason = reasonBuilder.toString();
-        if (cleanReason.isEmpty()) {
+        if (reason == null) {
             actor.reply(C.translate("&cYou must provide a reason!"));
             return;
         }
@@ -79,13 +58,20 @@ public class TempMuteCommand {
             return;
         }
 
+        boolean silent = true;
+        for (String f : flags) {
+            if (f.equalsIgnoreCase("-p")) silent = false;
+        }
+
+        String cleanReason = reason.replace("-p"," ").replace("-s"," ").trim();
+        if (cleanReason.isEmpty()) cleanReason = reason;
+
         muteManager.tempMutePlayer(target.getUniqueId(), cleanReason, duration);
 
         String formattedDuration = TimeUtil.formatDuration(duration);
         actor.reply(C.translate(Purgatory.getConfigManager().getMessages().getString("mute.tempmute_sender_notification","&aYou temporarily muted &f{target} &afor period {duration} for reason: {reason}").replace("{target}", target.getName()).replace("{duration}", formattedDuration).replace("{reason}", cleanReason)));
         target.sendMessage(C.translate(Purgatory.getConfigManager().getMessages().getString("mute.tempmute_message_player","&cYou have been temporarily muted for {duration}. Reason: &f {reason} ").replace("{duration}", formattedDuration).replace("{reason}", cleanReason)));
 
-        // Fix: correzione del typo "duratiom" -> "duration"
         String message = C.translate(Purgatory.getConfigManager().getMessages().getString("mute.tempmute_notification","&7{target} &ahas been temporally muted by &7{issuer} &ffor &f{duration} &aReason: &e{reason}").replace("{target}", target.getName()).replace("{issuer}", actor.name()).replace("{duration}", formattedDuration).replace("{reason}", cleanReason));
 
         if (silent) {
@@ -95,5 +81,9 @@ public class TempMuteCommand {
         } else {
             ProxyServer.getInstance().broadcast(C.translate("&c[! ] " + message));
         }
+    }
+
+    public java.util.List<String> tempmuteTabComplete(BungeeCommandActor actor, @Optional String prefix) {
+        return it.vanixstudios.purgatory.util.players.PlayerTargets.online(prefix);
     }
 }

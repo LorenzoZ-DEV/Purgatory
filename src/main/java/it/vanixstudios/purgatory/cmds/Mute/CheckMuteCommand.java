@@ -6,10 +6,7 @@ import it.vanixstudios.purgatory.util.strings.C;
 import it.vanixstudios.purgatory.util.duration.TimeUtil;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import revxrsal.commands.annotation.Command;
-import revxrsal.commands.annotation.Description;
-import revxrsal.commands.annotation.Named;
-import revxrsal.commands.annotation.Usage;
+import revxrsal.commands.annotation.*;
 import revxrsal.commands.bungee.annotation.CommandPermission;
 import revxrsal.commands.command.CommandActor;
 
@@ -49,5 +46,9 @@ public class CheckMuteCommand {
             actor.reply(C.translate("&cPlayer &f" + target.getName() + " &cis temporarily muted. Reason: &f" + reason +
                     " &cTime remaining: &f" + TimeUtil.formatDuration(timeLeft)));
         }
+    }
+
+    public java.util.List<String> checkmuteTabComplete(revxrsal.commands.bungee.actor.BungeeCommandActor actor, @Optional String prefix) {
+        return it.vanixstudios.purgatory.util.players.PlayerTargets.online(prefix);
     }
 }

@@ -6,16 +6,11 @@ import it.vanixstudios.purgatory.util.strings.C;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.ProxyServer;
 import org.bson.Document;
-import revxrsal.commands.annotation.Command;
-import revxrsal.commands.annotation.Description;
-import revxrsal.commands.annotation.Optional;
-import revxrsal.commands.annotation.Usage;
+import revxrsal.commands.annotation.*;
 import revxrsal.commands.bungee.annotation.CommandPermission;
 import revxrsal.commands.bungee.actor.BungeeCommandActor;
 
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Indexes.descending;
@@ -83,15 +78,12 @@ public class UnbanCommand {
         }
     }
 
-    public List<String> unbanTabComplete(BungeeCommandActor actor, @Optional String prefix) {
-        String lowerPrefix = prefix == null ? "" : prefix.toLowerCase();
-
-        return banManager.getBansCollection()
-                .find()
-                .map(doc -> doc.getString("name"))
-                .into(new java.util.ArrayList<>())
-                .stream()
-                .filter(name -> name != null && name.toLowerCase().startsWith(lowerPrefix))
-                .collect(Collectors.toList());
+    public java.util.List<String> unbanTabComplete(BungeeCommandActor actor, @Optional String prefix) {
+        String lp = prefix == null ? "" : prefix.toLowerCase();
+        return ProxyServer.getInstance().getPlayers().stream()
+                .map(ProxiedPlayer::getName)
+                .filter(name -> name.toLowerCase().startsWith(lp))
+                .sorted(String.CASE_INSENSITIVE_ORDER)
+                .collect(java.util.stream.Collectors.toList());
     }
 }

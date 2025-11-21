@@ -13,22 +13,25 @@ import revxrsal.commands.bungee.annotation.CommandPermission;
 
 import java.util.UUID;
 
-public class BanCommand {
+/**
+ * Command dedicated to IP-based bans.
+ */
+public class BanIpCommand {
 
     private final BanManager banManager;
 
-    public BanCommand(BanManager banManager) {
+    public BanIpCommand(BanManager banManager) {
         this.banManager = banManager;
     }
 
-    @Command({"ban", "jail", "b"})
-    @CommandPermission("purgatory.ban")
-    @Description("Ban a player")
-    @Usage("ban <player> [reason] [-p|-s]")
-    public void ban(BungeeCommandActor actor,
-                    @Named("player") String playerName,
-                    @Optional String durationOrReason,
-                    @Optional String reason) {
+    @Command({"banip", "ipban"})
+    @CommandPermission("purgatory.ban.ip")
+    @Description("Ban a player and store their IP")
+    @Usage("banip <player> [reason] [-p|-s]")
+    public void banIp(BungeeCommandActor actor,
+                      @Named("player") String playerName,
+                      @Optional String durationOrReason,
+                      @Optional String reason) {
 
         ProxiedPlayer target = ProxyServer.getInstance().getPlayer(playerName);
         UUID uuid = target != null ? target.getUniqueId() : PlayerTargets.offlineUUID(playerName);
@@ -53,15 +56,17 @@ public class BanCommand {
 
         if (parsedReason == null || parsedReason.isEmpty()) parsedReason = duration > 0 ? "Temporary ban" : "No reason specified.";
 
-        boolean silent = parsedReason != null && parsedReason.contains("-p");
+        boolean silent = parsedReason.contains("-p");
         String finalReason = parsedReason.replace("-p", "").replace("-s", "").trim();
         if (finalReason.isEmpty()) finalReason = duration > 0 ? "Temporary ban" : "No reason specified.";
 
+        String ip = target != null ? extractIp(target) : "";
         String actorName = actor.name();
+
         if (duration > 0) {
-            banManager.tempBanWithoutIp(uuid, playerName, duration, finalReason, actorName);
+            banManager.tempBan(uuid, playerName, duration, finalReason, ip, actorName);
         } else {
-            banManager.banWithoutIp(uuid, playerName, finalReason, actorName);
+            banManager.ban(uuid, playerName, finalReason, ip, actorName);
         }
 
         if (target != null) {
@@ -95,13 +100,20 @@ public class BanCommand {
         }
     }
 
+    private String extractIp(ProxiedPlayer player) {
+        String raw = player.getSocketAddress().toString();
+        int colon = raw.indexOf(':');
+        if (colon == -1) return raw.replace("/", "");
+        return raw.substring(0, colon).replace("/", "");
+    }
+
     private void notifyStaff(String message) {
         ProxyServer.getInstance().getPlayers().stream()
                 .filter(p -> p.hasPermission("purgatory.notifications"))
                 .forEach(p -> p.sendMessage(C.translate(message)));
     }
 
-    public java.util.List<String> banTabComplete(BungeeCommandActor actor, @Optional String prefix) {
+    public java.util.List<String> banipTabComplete(BungeeCommandActor actor, @Optional String prefix) {
         return PlayerTargets.online(prefix);
     }
 }

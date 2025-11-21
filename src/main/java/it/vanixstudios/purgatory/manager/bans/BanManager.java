@@ -35,16 +35,25 @@ public class BanManager {
                 .append("permanent", true)
                 .append("until", null)
                 .append("bannedAt", new Date())
-                .append("ip", ip)
                 .append("bannedBy", bannedBy)
                 .append("reason", reason);
+        if (ip != null && !ip.isEmpty()) {
+            doc.append("ip", ip);
+        }
         bans.insertOne(doc);
     }
 
-// Mantieni i metodi originali per compatibilità, ma con "Console" come default
-public void ban(UUID uuid, String name, String reason, String ip) {
-    ban(uuid, name, reason, ip, "Console");
-}
+    public void banWithoutIp(UUID uuid, String name, String reason, String bannedBy) {
+        ban(uuid, name, reason, "", bannedBy);
+    }
+
+    public void banConsole(UUID uuid, String name, String reason) {
+        ban(uuid, name, reason, "", "Console");
+    }
+
+    public void banWithIpConsole(UUID uuid, String name, String reason, String ip) {
+        ban(uuid, name, reason, ip, "Console");
+    }
 
     public void tempBan(UUID uuid, String name, long durationMillis, String reason, String ip, String bannedBy) {
         Date until = new Date(System.currentTimeMillis() + durationMillis);
@@ -53,16 +62,25 @@ public void ban(UUID uuid, String name, String reason, String ip) {
                 .append("permanent", false)
                 .append("until", until)
                 .append("bannedAt", new Date())
-                .append("ip", ip)
                 .append("bannedBy", bannedBy)
                 .append("reason", reason);
+        if (ip != null && !ip.isEmpty()) {
+            doc.append("ip", ip);
+        }
         bans.insertOne(doc);
     }
 
-// Mantieni i metodi originali per compatibilità, ma con "Console" come default
-public void tempBan(UUID uuid, String name, long durationMillis, String reason, String ip) {
-    tempBan(uuid, name, durationMillis, reason, ip, "Console");
-}
+    public void tempBanWithoutIp(UUID uuid, String name, long durationMillis, String reason, String bannedBy) {
+        tempBan(uuid, name, durationMillis, reason, "", bannedBy);
+    }
+
+    public void tempBanConsole(UUID uuid, String name, long durationMillis, String reason) {
+        tempBan(uuid, name, durationMillis, reason, "", "Console");
+    }
+
+    public void tempBanWithIpConsole(UUID uuid, String name, long durationMillis, String reason, String ip) {
+        tempBan(uuid, name, durationMillis, reason, ip, "Console");
+    }
 
     public boolean isBanned(UUID uuid) {
         Document doc = bans.find(eq("uuid", uuid.toString()))

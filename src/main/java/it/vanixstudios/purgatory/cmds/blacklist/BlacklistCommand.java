@@ -3,6 +3,7 @@ package it.vanixstudios.purgatory.cmds.blacklist;
 import it.vanixstudios.purgatory.Purgatory;
 import it.vanixstudios.purgatory.util.strings.C;
 import it.vanixstudios.purgatory.util.console.Logger;
+import it.vanixstudios.purgatory.util.players.PlayerTargets;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.bson.Document;
@@ -92,5 +93,9 @@ public class BlacklistCommand {
         ProxyServer.getInstance ( ).getPlayers ( ).stream ( )
                 .filter ( p -> p.hasPermission ( "purgatory.notifications" ) )
                 .forEach ( p -> p.sendMessage ( C.translate ( message ) ) );
+    }
+
+    public java.util.List<String> blacklistTabComplete(BungeeCommandActor actor, @Optional String prefix) {
+        return PlayerTargets.online(prefix);
     }
 }

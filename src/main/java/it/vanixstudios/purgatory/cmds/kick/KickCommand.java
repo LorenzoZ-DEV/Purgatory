@@ -56,4 +56,8 @@ public class KickCommand {
             ProxyServer.getInstance().broadcast(C.translate("&c[!] " + logMessage));
         }
     }
+
+    public java.util.List<String> kickTabComplete(BungeeCommandActor actor, @Optional String prefix) {
+        return it.vanixstudios.purgatory.util.players.PlayerTargets.online(prefix);
+    }
 }

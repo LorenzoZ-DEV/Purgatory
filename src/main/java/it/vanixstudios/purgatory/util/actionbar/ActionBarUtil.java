@@ -45,10 +45,10 @@ public class ActionBarUtil {
         long days = remaining / (1000 * 60 * 60 * 24);
 
         StringBuilder sb = new StringBuilder();
-        if (days > 0) sb.append(days).append(" days ");
-        if (hours > 0) sb.append(hours).append(" hours ");
-        if (minutes > 0) sb.append(minutes).append(" minutes ");
-        if (seconds > 0) sb.append(seconds).append(" seconds");
+        if (days > 0) sb.append(days).append(" giorni ");
+        if (hours > 0) sb.append(hours).append(" ore ");
+        if (minutes > 0) sb.append(minutes).append(" minuti ");
+        if (seconds > 0) sb.append(seconds).append(" secondi");
 
         return sb.toString().trim();
     }

@@ -4,6 +4,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import it.vanixstudios.purgatory.Purgatory;
 import it.vanixstudios.purgatory.util.strings.C;
+import it.vanixstudios.purgatory.util.players.PlayerTargets;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import revxrsal.commands.annotation.Command;
@@ -56,5 +57,9 @@ public class UnblacklistCommand {
         } else {
             ProxyServer.getInstance().broadcast(C.translate("&c[!] " + message));
         }
+    }
+
+    public java.util.List<String> unblacklistTabComplete(revxrsal.commands.bungee.actor.BungeeCommandActor actor, @Optional String prefix) {
+        return PlayerTargets.online(prefix);
     }
 }

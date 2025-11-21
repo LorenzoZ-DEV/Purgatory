@@ -2,14 +2,12 @@ package it.vanixstudios.purgatory.cmds.bans;
 
 import it.vanixstudios.purgatory.Purgatory;
 import it.vanixstudios.purgatory.manager.bans.BanManager;
+import it.vanixstudios.purgatory.util.players.PlayerTargets;
 import it.vanixstudios.purgatory.util.strings.C;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.bson.Document;
-import revxrsal.commands.annotation.Command;
-import revxrsal.commands.annotation.Description;
-import revxrsal.commands.annotation.Optional;
-import revxrsal.commands.annotation.Usage;
+import revxrsal.commands.annotation.*;
 import revxrsal.commands.bungee.annotation.CommandPermission;
 import revxrsal.commands.bungee.actor.BungeeCommandActor;
 
@@ -74,4 +72,8 @@ public void checkBan(BungeeCommandActor actor, String playerName) {
         actor.reply(C.translate("&aPlayer &e" + playerName + " &ais not banned."));
     }
 }
+
+    public java.util.List<String> checkbanTabComplete(BungeeCommandActor actor, @Optional String prefix) {
+        return PlayerTargets.online(prefix);
+    }
 }

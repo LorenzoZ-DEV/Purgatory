@@ -24,7 +24,7 @@ public class UnMuteCommand {
     @Description("Unmute a player")
     @CommandPermission("purgatory.unmute")
     public void onUnmute(CommandActor actor,
-                         @Named("player") @Suggest("player") String playerName,
+                         @Named("player") String playerName,
                          @Optional String... flags) {
 
         ProxiedPlayer target = ProxyServer.getInstance().getPlayer(playerName);
@@ -61,5 +61,9 @@ public class UnMuteCommand {
         } else {
             ProxyServer.getInstance().broadcast(C.translate("&c[!] " + message));
         }
+    }
+
+    public java.util.List<String> unmuteTabComplete(revxrsal.commands.bungee.actor.BungeeCommandActor actor, @Optional String prefix) {
+        return it.vanixstudios.purgatory.util.players.PlayerTargets.online(prefix);
     }
 }

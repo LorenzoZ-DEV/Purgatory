@@ -18,7 +18,7 @@ public class ServerConnectListener implements Listener {
     public void onServerConnect(ServerConnectEvent event) {
         ProxiedPlayer player = event.getPlayer();
         if (banManager.isBanned(player.getUniqueId())) {
-            ServerInfo jailServer = Purgatory.getConfigManager().getConfig().getString("JAILSYSTEM.server-jail","Jail").equalsIgnoreCase("") ? null : ProxyServer.getInstance().getServerInfo("Jail");
+            ServerInfo jailServer = Purgatory.getConfigManager().getConfig().getString("JAILSYSTEM.server-jail","purgatorio").equalsIgnoreCase("") ? null : ProxyServer.getInstance().getServerInfo("purgatorio");
             if (jailServer != null) {
                 event.setTarget(jailServer);
             } else {

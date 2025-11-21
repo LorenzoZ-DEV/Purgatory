@@ -3,10 +3,7 @@ package it.vanixstudios.purgatory.cmds.blacklist;
 import it.vanixstudios.purgatory.Purgatory;
 import it.vanixstudios.purgatory.util.strings.C;
 import org.bson.Document;
-import revxrsal.commands.annotation.Command;
-import revxrsal.commands.annotation.Description;
-import revxrsal.commands.annotation.Named;
-import revxrsal.commands.annotation.Usage;
+import revxrsal.commands.annotation.*;
 import revxrsal.commands.bungee.actor.BungeeCommandActor;
 
 import java.util.Date;
@@ -40,5 +37,9 @@ public class BlacklistInfoCommand {
         sender.reply(C.translate("&7Reason: &f" + (reason != null ? reason : "Unknown")));
         sender.reply(C.translate("&7Banned by: &f" + bannedBy));
         sender.reply(C.translate("&7Time: &f" + timeStr));
+    }
+
+    public java.util.List<String> blacklistinfoTabComplete(BungeeCommandActor actor, @Optional String prefix) {
+        return it.vanixstudios.purgatory.util.players.PlayerTargets.online(prefix);
     }
 }
