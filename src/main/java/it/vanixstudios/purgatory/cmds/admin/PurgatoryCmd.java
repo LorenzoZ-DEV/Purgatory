@@ -15,18 +15,8 @@ public class PurgatoryCmd {
     @Command("purgatory")
     @Usage("purgatory")
     public void onPurgatory(CommandActor sender) {
-        sender.reply ( C.translate (
-
-                """
-                        &7&m--------------------------------
-                        &7This server is using &cPurgatory
-                        &r
-                        &7Author: &cLorenz
-                        &7Contributors: &bEmpireMTR
-                        &7&m--------------------------------
-                        """
-
-        ) );
+        sender.reply ( C.translate ("&7This Server is running &c&lPurgatory &7- &ev" + Purgatory.getInstance ( ).getDescription ( ).getVersion ( ) ) );
+        sender.reply(C.translate("&7Developed by &cLorenzzz &7and Helped by: &bEmpireMTR"));
     }
 
     @Command("purgatory reload")
@@ -49,10 +39,10 @@ public class PurgatoryCmd {
     public void help(BungeeCommandActor actor, @Default("1") @Range(min = 1) int page, Help.RelatedCommands<BungeeCommandActor> commands) {
         int ENTRIES_PER_PAGE = 7;
         var list = commands.paginate ( page, ENTRIES_PER_PAGE );
-        actor.reply ( ChatColor.GOLD + "" + ChatColor.BOLD + "Purgatory Help (Page " + page + "):" );
+        actor.reply (C.translate( "&cPurgatory Help (Page " + page + "):" ));
 
         for (var entry : list) {
-            String usage = ChatColor.YELLOW + "- /" + entry.usage ( );
+            String usage = ChatColor.RED + "- /" + entry.usage ( );
             String desc = ChatColor.GRAY + "  → " + entry.description ( );
             actor.reply ( usage );
             actor.reply ( desc );

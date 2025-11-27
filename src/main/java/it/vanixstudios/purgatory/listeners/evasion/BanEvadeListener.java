@@ -92,29 +92,38 @@ public class BanEvadeListener implements Listener {
 
             String bannedName = evadingBan.getString("name");
             String reason = evadingBan.getString("reason");
-
-            banManager.ban(player.getUniqueId(), player.getName(), "Ban Evading (Alt of " + bannedName + ")", playerIP, "CONSOLE");
-            banManager.sendToJail ( player );
+            String serverName = player.getServer() != null ? player.getServer().getInfo().getName() : "connecting";
 
             Collection<ProxiedPlayer> players = ProxyServer.getInstance().getPlayers();
             for (ProxiedPlayer p : players) {
-                if (p.hasPermission("purgatory.staff")) {
-                    String message = "";
-                    try {
-                        String serverName = player.getServer() != null ? player.getServer().getInfo().getName() : "connecting";
-                        message = C.translate("&7(&c!&7) &7" + player.getName() + " &fwas sended to &c&lJAIL &ffor evading ban of &7" + bannedName);
-                        TextComponent component = new TextComponent(message);
-                        p.sendMessage(component);
-                    } catch (Exception e) {
-                        message = C.translate("&7(&c!&7) &7" + player.getName() + " &fwas sended to &c&lJAIL &ffor evading ban of & &7" + bannedName);
-                        TextComponent component = new TextComponent(message);
-                        p.sendMessage(component);
-                    }
-                    Logger.debug(message);
-                }
+                if (!p.hasPermission("purgatory.staff")) continue;
+
+                TextComponent alert = new TextComponent(C.translate("&7(&c!&7) &7" + player.getName() + " &cpotrebbe ban evadere il ban di &f" + bannedName + " &7(&f" + serverName + "&7)&f. "));
+
+                TextComponent banButton = new TextComponent(C.translate("&c[BAN]"));
+                banButton.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/ban " + player.getName() + " Ban Evading (" + bannedName + ")"));
+                banButton.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(C.translate("&7Banni il giocatore assicurandoti che sta ban evadendo  &d/ban " + player.getName()))));
+
+                TextComponent ssButton = new TextComponent(C.translate("&e[SS]"));
+                ssButton.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/ss " + player.getName()));
+                ssButton.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(C.translate("&7Controlli il giocatore se veramente sta ban evadendo &d/ss " + player.getName()))));
+
+                TextComponent dupeIpButton = new TextComponent(C.translate("&b[DUPEIP]"));
+                dupeIpButton.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/alts " + player.getName()));
+                dupeIpButton.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(C.translate("&7Controlli se l'ip corrisponde al suo  &d/alts " + player.getName()))));
+
+                alert.addExtra(new TextComponent(C.translate(" &7")));
+                alert.addExtra(banButton);
+                alert.addExtra(new TextComponent(C.translate(" &7| ")));
+                alert.addExtra(ssButton);
+                alert.addExtra(new TextComponent(C.translate(" &7| ")));
+                alert.addExtra(dupeIpButton);
+
+                p.sendMessage(alert);
             }
-        
-            // Esci dal loop dopo aver trovato il primo alt bannato
+
+            Logger.debug("[BanEvade] " + player.getName() + " potrebbe ban evadere il ban di " + bannedName + " (Motivo originale: " + reason + ")");
+
             break;
         }
     }
